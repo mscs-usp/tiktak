@@ -11,7 +11,7 @@ public class Eventv2 {
 		return sistema;
 	}
 
-	public ArrayList<Event> getEvent() {
+	public ArrayList<Event> getEvents() {
 		return eventos;
 	}
 	

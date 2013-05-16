@@ -59,7 +59,7 @@ public class TikTak {
 	
 	public void logv2(String usuario, String nomeDoEvento) {
 			Event evento = new Event(usuario, nomeDoEvento);
-			eventov2.getEvent().add(evento);
+			eventov2.getEvents().add(evento);
 			String json = GsonFactory.getGson().toJson(eventov2) + "\n";
 			System.out.println(json);
 			concatenarJson(json);
