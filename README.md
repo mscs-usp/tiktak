@@ -2,23 +2,23 @@ para usar o TikTak em seu projeto Maven
 
 1. Adicionar o repositorio Maven do Github da seguinte forma:
 ```
-<repository>
+  <repository>
 		<id>tiktak.repo</id>
 		<url>https://raw.github.com/tiktak-project/tiktak/mvn-repo/</url>
 		<snapshots>
 			<enabled>true</enabled>
 			<updatePolicy>always</updatePolicy>
 		</snapshots>
-</repository>
+  </repository>
 ```
 
 2. Adicionar a dependencia da versão a ser usada da seguinte forma:
 ```
-<dependency>
+  <dependency>
 	<groupId>br.org.tiktak</groupId>
 	<artifactId>tiktak-api</artifactId>
 	<version>0.2</version>
-</dependency>
+  </dependency>
 ```
 
 Licença: LGPL - http://www.gnu.org/copyleft/lesser.html
