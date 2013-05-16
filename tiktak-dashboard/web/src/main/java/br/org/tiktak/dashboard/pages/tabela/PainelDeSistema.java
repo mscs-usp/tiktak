@@ -64,7 +64,7 @@ public class PainelDeSistema extends Panel {
 		List<Eventv2> listaDeEventv2 = GsonFactory.getGson().fromJson(reader, new TypeToken<List<Eventv2>>() {}.getType());
 		for (Eventv2 eventov2 : listaDeEventv2) {
 			if (eventov2.getSystem().equals(nomeDoSistema)) {
-				for (Event evento : eventov2.getEvent()) {
+				for (Event evento : eventov2.getEvents()) {
 					if (!listaDeIds.contains(evento.getUuid())) {
 						listaDeIds.add(evento.getUuid());
 						totalDeEventos++;
