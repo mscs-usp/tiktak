@@ -3,12 +3,12 @@ para usar o TikTak em seu projeto Maven
 1. Adicionar o repositorio Maven do Github da seguinte forma:
 ```
 <repository>
-  <id>tiktak.repo</id>
-  <url>https://raw.github.com/tiktak-project/tiktak/mvn-repo/</url>
-  <snapshots>
-    <enabled>true</enabled>
-    <updatePolicy>always</updatePolicy>
-  </snapshots>
+	<id>tiktak.repo</id>
+	<url>https://raw.github.com/tiktak-project/tiktak/mvn-repo/</url>
+	<snapshots>
+		<enabled>true</enabled>
+		<updatePolicy>always</updatePolicy>
+	</snapshots>
 </repository>
 ```
 
