@@ -13,10 +13,12 @@ import java.util.UUID;
 
 import jmine.tec.web.wicket.pages.Template;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.model.Model;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -32,6 +34,7 @@ public class UploadDeArquivo extends Template {
 	HashMap<String, Integer> mapa = new HashMap<String, Integer>();
 	Integer totalDeEventos = 0;
 	Form<Void> form = new Form<Void>("form");
+	Label labelErro = new Label("labelErro", "");
 	
 	File bdDashboard = new File("dashboard.bd");
 
@@ -55,18 +58,22 @@ public class UploadDeArquivo extends Template {
 				super.onSubmit();
 				FileUpload fileUpload = fileUploadField.getFileUpload();
 				if(fileUpload == null){
-					warn("é necessário fornecer o arquivo");
+					labelErro = new Label("labelErro", "É necessário fornecer um arquivo");
 				}
 				else{
 					try {
+						labelErro = new Label("labelErro", "");
 						processarArquivo(fileUpload);
 					} catch (IOException e) {
 						error("erro ao importar arquivo: "+e.getMessage());
 					}
 				}
+				form.remove(labelErro);
+				form.add(labelErro);
 			}
 		};
 		form.add(button);
+		form.add(labelErro);
 		this.add(form);
 	}
 	
