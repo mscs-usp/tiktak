@@ -6,3 +6,4 @@ para usar o TikTak em seu projeto Maven
   <version>0.2-SNAPSHOT</version>
 </dependency>
 ```
+LGPL - http://www.gnu.org/copyleft/lesser.html
