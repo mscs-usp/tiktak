@@ -51,15 +51,15 @@ public class TesteConteudoSimulacaoCliente {
 		driver.findElement(By.name("txt_funcionalidade")).clear();
 		driver.findElement(By.name("txt_funcionalidade")).sendKeys(funcionalidade);
 		driver.findElement(By.xpath("//input[@value='Enviar']")).click();
-		String conteudoArquivo = carrega("tik.tak");
-		Boolean resultado = conteudoArquivo.contains(usuario);
+		String conteudoArquivo = carrega("Simulacao.tak");
+		//Boolean resultado = conteudoArquivo.contains(usuario);
 		assertTrue(conteudoArquivo.contains(usuario));
 		assertTrue(conteudoArquivo.contains(funcionalidade));
 	}
 
 	private String carrega(String arquivo) throws IOException {
 		// TODO Auto-generated method stub
-		BufferedReader reader = new BufferedReader( new FileReader (arquivo));
+		BufferedReader reader = new BufferedReader(new FileReader(arquivo));
 		String line = null;
 		StringBuilder stringBuilder = new StringBuilder();
 		String ls = System.getProperty("line.separator");
