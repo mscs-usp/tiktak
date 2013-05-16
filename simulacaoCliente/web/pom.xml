@@ -77,6 +77,11 @@
     </build>
 
     <dependencies>
+    	<dependency>
+		    <groupId>br.org.tiktak</groupId>
+			<artifactId>tiktak-api</artifactId>
+			<version>0.2</version>
+        </dependency>
         <dependency>
             <groupId>jmine.tec</groupId>
             <artifactId>jmine-tec-services-impl</artifactId>
