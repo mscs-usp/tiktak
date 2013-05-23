@@ -39,7 +39,13 @@
             <url>http://repo.jmine.com.br/repo</url>
         </pluginRepository>
     </pluginRepositories>
-
+<dependencies>
+<dependency>
+       <groupId>org.mockito</groupId>
+       <artifactId>mockito-all</artifactId>
+       <version>1.8.4</version>
+</dependency>
+</dependencies>
     <build>
         <testResources>
             <testResource>
