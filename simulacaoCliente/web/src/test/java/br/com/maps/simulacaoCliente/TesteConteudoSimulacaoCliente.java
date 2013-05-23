@@ -33,6 +33,8 @@ public class TesteConteudoSimulacaoCliente {
 		driver = new FirefoxDriver();
 		baseUrl = "http://localhost:8888";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		
+		
 	}
 
 	@Test
