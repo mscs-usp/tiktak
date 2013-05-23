@@ -15,6 +15,7 @@ import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import bancosys.tec.exception.MessageCreator;
 import br.org.tiktak.core.Eventv2;
 import br.org.tiktak.core.GsonFactory;
+import br.org.tiktak.dashboard.core.ProcessamentoArquivo;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -30,7 +31,8 @@ public class Tabela extends Template {
 	protected void onInitialize() {
 		super.onInitialize();
 
-		Set<String> nomesSistemas = getNomesSistemas();
+		ProcessamentoArquivo processador = new ProcessamentoArquivo();
+		Set<String> nomesSistemas = processador.getNomesSistemas();
 		List tabs = new ArrayList();
 
 		for (String nomeDoSistema : nomesSistemas)
@@ -38,23 +40,5 @@ public class Tabela extends Template {
 		
 		add(new TabbedPanel("tabs", tabs));
 		
-	}
-
-	private Set<String> getNomesSistemas() {
-		Set<String> nomesSistemas = new HashSet<String>();
-		File file = new File("dashboard.bd");
-		if (file.exists()) {
-			try {
-				List<Eventv2> listaDeEventv2 = GsonFactory.getGson().fromJson(
-						new FileReader(file), new TypeToken<List<Eventv2>>() {
-						}.getType());
-				for (Eventv2 eventv2 : listaDeEventv2)
-					nomesSistemas.add(eventv2.getSystem());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return nomesSistemas;
 	}
 }
