@@ -26,6 +26,24 @@ body {
   background: #ffffff !important;
 }
 
+.tab-row ul, .tab-row li {
+	display: inline !important;
+	padding: 5px 10px 5px 10px;
+	background-color: #E8E8E8;
+}
+
+#chart_div div {
+	margin-left: 34%;
+}
+
+.tab-row {
+	margin-top: 5px;
+}
+
+.tab-panel {
+	margin-top: 10px;
+}
+
 /* CLIENT LOGO */
 /* MENU */
 .menu {

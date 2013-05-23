@@ -36,24 +36,25 @@ public class Interface extends Template {
 	protected void onInitialize() {
 		super.onInitialize();
 
-		try{
+		try {
 			ProcessamentoArquivo processador = new ProcessamentoArquivo();
 			Set<String> nomesSistemas = processador.getNomesSistemas();
 			List tabs = new ArrayList();
 
 			for (String nomeDoSistema : nomesSistemas)
 				tabs.add(new TabDeSistema(nomeDoSistema));
-			
+
 			add(new TabbedPanel("tabs", tabs));
-		} catch(FileNotFoundException e) {
-			
+		} catch (FileNotFoundException e) {
+
 		}
 	}
-	
-	@Override
+
+	/*@Override
 	public void renderHead(IHeaderResponse arg0) {
 		super.renderHead(arg0);
-		
-		arg0.renderCSSReference(new PackageResourceReference(CSS.class, "painel_de_sistema.css"));
-	}
+
+		arg0.renderCSSReference(new PackageResourceReference(CSS.class,
+				"painel_de_sistema.css"));
+	}*/
 }
