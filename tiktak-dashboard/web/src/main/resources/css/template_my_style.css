@@ -21,6 +21,24 @@
   background-image: linear-gradient(top, #edeaea 0%, #e8e8e8 7%, #e2e2e2 50%, #e2e2e2 53%, #c6c6c6 90%, #bcbcbc 95%, #a5a5a5 100%);
 }
 
+/* BODY */
+body {
+  background: #ffffff !important;
+}
+
+.tab-row ul, .tab-row li {
+	display: inline !important;
+	padding: 10px;
+}
+
+.tab-row {
+	margin-top: 5px;
+}
+
+.tab-panel {
+	margin-top: 10px;
+}
+
 /* CLIENT LOGO */
 /* MENU */
 .menu {
