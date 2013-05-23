@@ -20,7 +20,7 @@ import br.org.tiktak.dashboard.core.ProcessamentoArquivo;
 
 import com.google.gson.reflect.TypeToken;
 
-public class Tabela extends Template {
+public class Interface extends Template {
 
 	@Override
 	protected MessageCreator getHelpTextCreator() {
