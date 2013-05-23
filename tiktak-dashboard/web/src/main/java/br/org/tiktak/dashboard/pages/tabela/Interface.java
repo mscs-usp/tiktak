@@ -1,6 +1,7 @@
 package br.org.tiktak.dashboard.pages.tabela;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import br.org.tiktak.dashboard.core.ProcessamentoArquivo;
 
 import com.google.gson.reflect.TypeToken;
 
-public class Tabela extends Template {
+public class Interface extends Template {
 
 	@Override
 	protected MessageCreator getHelpTextCreator() {
@@ -35,15 +36,18 @@ public class Tabela extends Template {
 	protected void onInitialize() {
 		super.onInitialize();
 
-		ProcessamentoArquivo processador = new ProcessamentoArquivo();
-		Set<String> nomesSistemas = processador.getNomesSistemas();
-		List tabs = new ArrayList();
+		try{
+			ProcessamentoArquivo processador = new ProcessamentoArquivo();
+			Set<String> nomesSistemas = processador.getNomesSistemas();
+			List tabs = new ArrayList();
 
-		for (String nomeDoSistema : nomesSistemas)
-			tabs.add(new TabDeSistema(nomeDoSistema));
-		
-		add(new TabbedPanel("tabs", tabs));
-		
+			for (String nomeDoSistema : nomesSistemas)
+				tabs.add(new TabDeSistema(nomeDoSistema));
+			
+			add(new TabbedPanel("tabs", tabs));
+		} catch(FileNotFoundException e) {
+			
+		}
 	}
 	
 	@Override
