@@ -11,6 +11,8 @@ public class TikTak {
 	private String nomeDoSistema;
 	private File arquivo;
 	private Eventv2 eventov2;
+	private String usuario;
+	private String evento;
 
 	public TikTak(String sistema){
 		caminhoDoDiretorio = "";
@@ -23,12 +25,12 @@ public class TikTak {
 			obterCaminhoDoDiretorio();
 			criarDiretorioLog();
 			obterCaminhoDoArquivo();
-			criarArquivoLog();
+			criarArquivoLogv2();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+		
 	public String getCaminhoDoArquivo() {
 		return caminhoDoArquivo;
 	}
@@ -45,26 +47,74 @@ public class TikTak {
 			obterCaminhoDoDiretorio();
 			criarDiretorioLog();
 			obterCaminhoDoArquivo();
-			criarArquivoLog();
+			criarArquivoLogv2();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void log(String usuario, String nomeDoEvento) {
-			Event evento = new Event(usuario, nomeDoEvento);
-			String json = GsonFactory.getGson().toJson(evento) + "\n";
-			concatenarJson(json);
+		Event evento = new Event(usuario, nomeDoEvento);
+		String json = GsonFactory.getGson().toJson(evento) + "\n";
+		concatenarJson(json);
 	}
 	
 	public void logv2(String usuario, String nomeDoEvento) {
+		this.usuario = usuario;
+		this.evento = nomeDoEvento;
+		String json;
+		
+
+		File f;
+		try {
+			f = criarArquivoLogv2();
+			//json = carregarArquivo
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
 			Event evento = new Event(usuario, nomeDoEvento);
 			eventov2.getEvents().add(evento);
-			String json = GsonFactory.getGson().toJson(eventov2) + "\n";
+			json = GsonFactory.getGson().toJson(eventov2) + "\n";
 			System.out.println(json);
-			concatenarJson(json);
+		}
+		concatenarJsonv2(json);
+	}
+	
+	private void concatenarJsonv2(String json) {
+		try{
+			RandomAccessFile raf = new RandomAccessFile(arquivo, "rw");
+			//raf.readLine();			
+			if (naocontemEventos()) {
+				raf.seek(raf.length() - 4);
+				raf.write(json.getBytes());
+				raf.write(("]\n" + json).getBytes());
+			} else {
+				raf.seek(raf.length() - 4);
+				raf.write((",]\n" + json).getBytes());
+			}
+			raf.write("}".getBytes());
+			raf.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
+	private Boolean naocontemEventos() {
+		boolean estaVaziov2 = false;
+		int count = 0;
+		try{
+			RandomAccessFile raf = new RandomAccessFile(arquivo, "rw");
+			//raf.readLine();
+			String linha = raf.readLine();
+			count = linha.split("\\{",-1).length-1;
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ((!estaVaziov2) && (count == 1));
+	}
+	
 	private void concatenarJson(String json) {
 		try{
 			RandomAccessFile raf = new RandomAccessFile(arquivo, "rw");
@@ -130,23 +180,28 @@ public class TikTak {
 		return arquivo;
 	}
 
-	private File criarArquivoLog() throws IOException {		
-		arquivo = new File(this.caminhoDoArquivo);
-		if (!arquivo.exists()) {
-			arquivo.createNewFile();
-			RandomAccessFile writer = new RandomAccessFile(arquivo, "rw");
-			writer.write("[\n]".getBytes());
-			writer.close();
-		}		
-		return arquivo;
-	}
+//	private File criarArquivoLog() throws IOException {		
+//		arquivo = new File(this.caminhoDoArquivo);
+//		if (!arquivo.exists()) {
+//			arquivo.createNewFile();
+//			RandomAccessFile writer = new RandomAccessFile(arquivo, "rw");
+//			writer.write("[\n]".getBytes());
+//			writer.close();
+//		}		
+//		return arquivo;
+//	}
 	
 	private File criarArquivoLogv2() throws IOException {		
 		arquivo = new File(this.caminhoDoArquivo);
 		if (!arquivo.exists()) {
 			arquivo.createNewFile();
 			RandomAccessFile writer = new RandomAccessFile(arquivo, "rw");
-			writer.write("{\n}".getBytes());
+			
+			Event evento = new Event(this.usuario, this.evento);
+			String json = GsonFactory.getGson().toJson(eventov2) + "\n";
+			
+			writer.write(json.getBytes());
+			//writer.write("{\n}".getBytes());
 			writer.close();
 		}		
 		return arquivo;

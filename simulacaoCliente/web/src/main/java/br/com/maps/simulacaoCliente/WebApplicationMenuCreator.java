@@ -1,16 +1,15 @@
 package br.com.maps.simulacaoCliente;
 
-import br.com.maps.simulacaoCliente.pages.AlterarSenhaPage;
-import br.com.maps.simulacaoCliente.pages.CrudUsuarioPage;
-import br.com.maps.simulacaoCliente.pages.simulacao.Simulacao;
 import jmine.tec.datadigester.web.pages.importacao.Importacao;
 import jmine.tec.persist.web.pages.audit.ConsultaTrilhaAuditoria;
 import jmine.tec.persist.web.pages.auth.Authorization;
 import jmine.tec.rtm.impl.web.pages.ConsultaExceptionRecord;
 import jmine.tec.rtm.impl.web.pages.diagnosticador.ConsultaDiagnosticador;
-
 import jmine.tec.web.wicket.component.menu.cfg.AbstractMenuConfigFactoryBean;
 import jmine.tec.web.wicket.component.menu.cfg.MenuConfig;
+import br.com.maps.simulacaoCliente.pages.AlterarSenhaPage;
+import br.com.maps.simulacaoCliente.pages.CrudUsuarioPage;
+import br.com.maps.simulacaoCliente.pages.simulacao.Simulacao;
 
 /**
  * Starting point menu creator

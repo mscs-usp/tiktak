@@ -1,6 +1,5 @@
 package br.com.maps.simulacaoCliente.pages.validation;
 
-import br.com.maps.simulacaoCliente.pages.messages.ErrorMessages;
 import jmine.tec.web.wicket.pages.validator.AbstractFormValidator;
 
 import org.apache.wicket.markup.html.form.Form;
@@ -10,6 +9,7 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import bancosys.tec.exception.LocalizedMessageHolder;
 import bancosys.tec.security.impl.domain.User;
 import bancosys.tec.utils.md5sum.MD5SumTool;
+import br.com.maps.simulacaoCliente.pages.messages.ErrorMessages;
 
 /**
  * Valida que a nvoa senha é diferente da anterior e que a nova senha foi digitada corretamente duas vezes.

@@ -8,18 +8,18 @@ import jmine.tec.web.wicket.pages.form.FormType;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.PasswordTextField;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import br.com.maps.simulacaoCliente.HelpMessages;
 import bancosys.tec.exception.MessageCreator;
 import bancosys.tec.security.annotation.Secure;
 import bancosys.tec.security.authorization.UrlPermission;
 import bancosys.tec.security.impl.dao.UserDAO;
 import bancosys.tec.security.impl.domain.User;
 import bancosys.tec.utils.md5sum.MD5SumTool;
+import br.com.maps.simulacaoCliente.HelpMessages;
 
 /**
  * Tela para cadastro e edição de usuários.
