@@ -21,4 +21,6 @@ para usar o TikTak em seu projeto Maven
   </dependency>
 ```
 
+[Para saber mais sobre o TikTak](https://github.com/tiktak-project/tiktak/wiki/TikTak:-Uma-API-Java-para-feedback-de-usuários)
+
 Licença: LGPL - http://www.gnu.org/copyleft/lesser.html
