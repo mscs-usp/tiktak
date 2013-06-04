@@ -86,14 +86,12 @@ public class TikTak {
 			RandomAccessFile raf = new RandomAccessFile(arquivo, "rw");
 			//raf.readLine();			
 			if (naocontemEventos()) {
-				raf.seek(raf.length() - 4);
 				raf.write(json.getBytes());
-				raf.write(("]\n" + json).getBytes());
 			} else {
 				raf.seek(raf.length() - 4);
-				raf.write((",]\n" + json).getBytes());
+				raf.write(("]\n" + json).getBytes());
+				raf.write("}".getBytes());
 			}
-			raf.write("}".getBytes());
 			raf.close();
 		} catch (IOException e) {
 			e.printStackTrace();
