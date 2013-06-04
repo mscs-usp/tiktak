@@ -137,7 +137,6 @@ public class TesteAPI {
 		System.out.println("ConteudoArquivo: " + conteudoArquivo);
 		System.out.println("Usuario: " + this.usuario);
 		assertTrue(conteudoArquivo.contains(this.usuario));
-		//excluiArquivoCriadoParaTeste(nomeDoArquivo);
 	}
 	
 	@Test
