@@ -1,10 +1,11 @@
-TIKTAK
+TIKTAK 0.3
 ------
 
-Para usar o TikTak em seu projeto Maven:
+Para usar o TikTak 0.3 em seu projeto Maven:
 
 1. Adicionar o repositório Maven do Github da seguinte forma:
 ```
+<repositories>
   <repository>
 		<id>tiktak.repo</id>
 		<url>https://raw.github.com/tiktak-project/tiktak/mvn-repo/</url>
@@ -13,18 +14,19 @@ Para usar o TikTak em seu projeto Maven:
 			<updatePolicy>always</updatePolicy>
 		</snapshots>
   </repository>
+</repositories>
 ```
 
 2. Adicionar a dependência da versão a ser usada da seguinte forma:
 ```
+<dependecies>
   <dependency>
 	<groupId>br.org.tiktak</groupId>
 	<artifactId>tiktak-api</artifactId>
-	<version>$VERSAO</version>
+	<version>0.3</version>
   </dependency>
+</dependecies>
 ```
-
-Mudando `$VERSAO` para a versão desejada do histórico.
 
 [Para saber mais sobre o TikTak](https://github.com/tiktak-project/tiktak/wiki/TikTak:-Uma-API-Java-para-feedback-de-usuários)
 
