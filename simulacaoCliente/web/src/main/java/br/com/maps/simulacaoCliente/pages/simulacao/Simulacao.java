@@ -11,7 +11,7 @@ import bancosys.tec.exception.MessageCreator;
 import br.org.tiktak.core.TikTak;
 
 public class Simulacao extends Template {
-	
+
 	String usuario;
 	String funcionalidade;
 
@@ -24,7 +24,7 @@ public class Simulacao extends Template {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		
+
 		Form<Object> form = new Form<Object>("form");
 		add(form);
 		form.add(new TextField<String>("txt_usuario", new PropertyModel<String>(this, "usuario")));
@@ -33,7 +33,7 @@ public class Simulacao extends Template {
 			@Override
 			public void onSubmit() {
 				TikTak tiktak = new TikTak("Simulacao");
-				tiktak.logv2(usuario, funcionalidade);
+				tiktak.log(usuario, funcionalidade);
 				super.onSubmit();
 			}
 		});
