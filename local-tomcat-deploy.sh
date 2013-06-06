@@ -38,4 +38,4 @@ cp -av $DASHBOARDROOT/core/target/loadeddb* $TOMCATROOT/tiktak/
 cp -av $DASHBOARDROOT/web/target/tiktak-dashboard.war $TOMCATROOT/webapps
 
 # 8
-cp -av $HOME/.m2/repository/jmine/tec/jmine-tec-persist/2.10.2-RC1/jmine-tec-persist-2.10.2-RC1-tests.jar $TOMCAT/webapps/tiktak-dashboard/WEB-INF/lib
+cp -av $HOME/.m2/repository/jmine/tec/jmine-tec-persist/2.10.2-RC1/jmine-tec-persist-2.10.2-RC1-tests.jar $TOMCAT/webapps/tiktak-dashboard/WEB-INF/lib/
