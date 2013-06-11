@@ -38,13 +38,15 @@ public class Interface extends Template {
 
 		try {
 			ProcessamentoArquivo processador = new ProcessamentoArquivo();
+			
 			Set<String> nomesSistemas = processador.getNomesSistemas();
 			List tabs = new ArrayList();
-
-			for (String nomeDoSistema : nomesSistemas)
-				tabs.add(new TabDeSistema(nomeDoSistema));
-
+			if ( nomesSistemas != null) {
+				for (String nomeDoSistema : nomesSistemas)
+					tabs.add(new TabDeSistema(nomeDoSistema));
+			}
 			add(new TabbedPanel("tabs", tabs));
+			
 		} catch (FileNotFoundException e) {
 
 		}

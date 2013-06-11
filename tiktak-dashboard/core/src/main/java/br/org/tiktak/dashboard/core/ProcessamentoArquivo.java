@@ -35,9 +35,13 @@ public class ProcessamentoArquivo {
 		List<Eventv2> listaDeEventv2 = GsonFactory.getGson().fromJson(
 				reader, new TypeToken<List<Eventv2>>() {
 				}.getType());
-		for (Eventv2 eventv2 : listaDeEventv2)
-			nomesSistemas.add(eventv2.getSystem());
-
-		return nomesSistemas;
+		if ( listaDeEventv2 != null) {
+			for (Eventv2 eventv2 : listaDeEventv2)
+				nomesSistemas.add(eventv2.getSystem());
+			return nomesSistemas;
+		}
+		else {
+			return null;
+		}
 	}
 }
