@@ -34,22 +34,23 @@ public class Interface extends Template {
 	@SuppressWarnings({ "serial", "unchecked" })
 	@Override
 	protected void onInitialize() {
+		List tabs = new ArrayList();
 		super.onInitialize();
-
+		
 		try {
 			ProcessamentoArquivo processador = new ProcessamentoArquivo();
 			
 			Set<String> nomesSistemas = processador.getNomesSistemas();
-			List tabs = new ArrayList();
+			
 			if ( nomesSistemas != null) {
 				for (String nomeDoSistema : nomesSistemas)
 					tabs.add(new TabDeSistema(nomeDoSistema));
 			}
-			add(new TabbedPanel("tabs", tabs));
-			
 		} catch (FileNotFoundException e) {
-
+			
 		}
+		
+		add(new TabbedPanel("tabs", tabs));
 	}
 
 	/*@Override
