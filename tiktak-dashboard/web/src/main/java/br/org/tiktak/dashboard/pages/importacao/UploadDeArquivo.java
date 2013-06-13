@@ -26,6 +26,7 @@ import bancosys.tec.exception.MessageCreator;
 import br.org.tiktak.core.Eventv2;
 import br.org.tiktak.core.GsonFactory;
 import br.org.tiktak.dashboard.core.BDfuncionalidades;
+import br.org.tiktak.dashboard.pages.tabela.Interface;
 
 public class UploadDeArquivo extends Template {
 
@@ -64,6 +65,7 @@ public class UploadDeArquivo extends Template {
 					try {
 						labelErro = new Label("labelErro", "");
 						processarArquivo(fileUpload);
+						setResponsePage(Interface.class);
 					} catch (IOException e) {
 						error("erro ao importar arquivo: "+e.getMessage());
 					}
