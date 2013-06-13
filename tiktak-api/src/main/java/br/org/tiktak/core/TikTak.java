@@ -12,14 +12,32 @@ public class TikTak {
 	private final Eventv2 eventov2;
 	private String usuario;
 	private String evento;
-
-	public TikTak(final String sistema) {
+		
+	//fix-me 
+	public TikTak (final String sistema) {
 		caminhoDoDiretorio = "";
 		caminhoDoArquivo = "";
 		nomeDoSistema = sistema;
 		// Implementado como um singleton
 		this.eventov2 = Eventv2.getInstance();
 		this.eventov2.Init(sistema);
+		try {
+			obterCaminhoDoDiretorio();
+			criarDiretorioLog();
+			obterCaminhoDoArquivo();
+			criarArquivoLog();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public TikTak(){
+		caminhoDoDiretorio = "";
+		caminhoDoArquivo = "";
+		nomeDoSistema = "tik";
+		// Implementado como um singleton
+		this.eventov2 = Eventv2.getInstance();
+		this.eventov2.Init("tik");
 		try {
 			obterCaminhoDoDiretorio();
 			criarDiretorioLog();
