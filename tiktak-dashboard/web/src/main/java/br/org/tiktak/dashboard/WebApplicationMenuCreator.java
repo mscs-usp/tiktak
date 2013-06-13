@@ -23,8 +23,8 @@ public class WebApplicationMenuCreator extends AbstractMenuConfigFactoryBean {
 
 		// add menu here
 		// config.addPage(Authorization.class, "Autorização", "Autorizar");
-		config.addPage(Interface.class, "tiktak", "Tabela");
 		config.addPage(UploadDeArquivo.class, "tiktak", "Importar Arquivo");
+		config.addPage(Interface.class, "tiktak", "Dashboard");
 		// config.addPage(ConsultaTrilhaAuditoria.class, "Autorização",
 		// "Auditoria");
 		// config.addPage(ConsultaDiagnosticador.class, "Infra",
