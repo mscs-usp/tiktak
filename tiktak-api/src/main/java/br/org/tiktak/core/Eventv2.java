@@ -25,15 +25,19 @@ public class Eventv2 {
 
     // Construtor privado. Suprime o construtor público padrao.
     private Eventv2() {
-         // Operações de inicialização da classe
 		this.sistema = null;
 		this.eventos = new ArrayList<Event>();
     }
     
-    // Construtor privado. Suprime o construtor público padrao.
-    public void Init(final String system) {
-         // Operações de inicialização da classe
-		this.sistema = system;
+    // Assumimos que o sistema do Usuário não terá nome "System" para respeitar a precedência
+    public void init(final String system) {
+    	String parametroGetProperty = System.getProperty("tiktak.system");
+    	String nomeFinal = system;
+    	if(system.equals("System") || system.equals("")){
+    		if(parametroGetProperty != null && !parametroGetProperty.equals(""))
+    			nomeFinal = parametroGetProperty;
+    	} 
+    	this.sistema = nomeFinal;
     }
 
 	public void log(final String user, final String funcionality) {

@@ -7,25 +7,19 @@ import java.io.RandomAccessFile;
 public class TikTak {
 	private String caminhoDoDiretorio;
 	private String caminhoDoArquivo;
+	private String sistemaAPI;
 	private File arquivo;
 	private Eventv2 eventov2;
 	private String usuario;
 	private String evento;
 		
 	public TikTak (final String sistema) {
-		caminhoDoDiretorio = "";
+		caminhoDoDiretorio = System.getProperty("user.dir");
 		caminhoDoArquivo = "";
-		// Implementado como um singleton
+		sistemaAPI = sistema;
+		obterECriarNoDisco();
 		this.eventov2 = Eventv2.getInstance();
-		this.eventov2.Init(sistema);
-		try {
-			obterCaminhoDoDiretorio();
-			criarDiretorioLog();
-			obterCaminhoDoArquivo();
-			criarArquivoLog();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.eventov2.init(sistemaAPI);
 	}
 	
 	public TikTak(){
@@ -128,38 +122,36 @@ public class TikTak {
 
 		parametroSetDir = this.caminhoDoDiretorio;
 		parametroGetProperty = System.getProperty("tiktak.dir");
-		if (parametroSetDir != null) {
+		if (parametroSetDir != null && !parametroSetDir.equals("")) {
 			caminhoDoDiretorio = parametroSetDir;
 		} else if (parametroGetProperty != null) {
 			caminhoDoDiretorio = parametroGetProperty;
+		}
+		
+		if (!caminhoDoDiretorio.endsWith("/")) {
+			caminhoDoDiretorio += "/";
 		}
 		return caminhoDoDiretorio;
 	}
 
 	private String criarDiretorioLog() throws IOException {
-		String diretorio = obterCaminhoDoDiretorio();
+		String diretorio = caminhoDoDiretorio;
 		if (diretorio != "") {
 			File diretorioFisico = new File(diretorio);
 
 			if (!diretorioFisico.exists()) {
 				diretorioFisico.mkdir();
-				System.out.println("diretorio criado! o/");
 			}
 		}
 		return diretorio;
 	}
 
 	private String obterCaminhoDoArquivo() throws IOException {
-		String parametroSetArquivo, parametroGetProperty;
+		String parametroSetArquivo;
 		parametroSetArquivo = "tik.tak";
-		parametroGetProperty = System.getProperty("tiktak.system");
-		if (parametroSetArquivo != null) {
-			caminhoDoArquivo = this.caminhoDoDiretorio + parametroSetArquivo;
-		} else if (parametroGetProperty != null) {
-			caminhoDoArquivo = this.caminhoDoDiretorio + parametroGetProperty;
-		} else {
-			caminhoDoArquivo = this.caminhoDoDiretorio + "DefaultSystem";
-		}
+		
+		caminhoDoArquivo = this.caminhoDoDiretorio + parametroSetArquivo;
+		
 		return caminhoDoArquivo;
 	}
 
