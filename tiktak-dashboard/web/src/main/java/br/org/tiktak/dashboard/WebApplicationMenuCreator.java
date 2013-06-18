@@ -5,6 +5,7 @@ import jmine.tec.web.wicket.component.menu.cfg.MenuConfig;
 import br.org.tiktak.dashboard.pages.AlterarSenhaPage;
 import br.org.tiktak.dashboard.pages.CrudUsuarioPage;
 import br.org.tiktak.dashboard.pages.importacao.UploadDeArquivo;
+import br.org.tiktak.dashboard.pages.remocao.RemocaoSistema;
 import br.org.tiktak.dashboard.pages.tabela.Interface;
 
 /**
@@ -25,6 +26,7 @@ public class WebApplicationMenuCreator extends AbstractMenuConfigFactoryBean {
 		// config.addPage(Authorization.class, "Autorização", "Autorizar");
 		config.addPage(UploadDeArquivo.class, "tiktak", "Importar Arquivo");
 		config.addPage(Interface.class, "tiktak", "Dashboard");
+		config.addPage(RemocaoSistema.class, "tiktak", "Remover Sistema");
 		// config.addPage(ConsultaTrilhaAuditoria.class, "Autorização",
 		// "Auditoria");
 		// config.addPage(ConsultaDiagnosticador.class, "Infra",
