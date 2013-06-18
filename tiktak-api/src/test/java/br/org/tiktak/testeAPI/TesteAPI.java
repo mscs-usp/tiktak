@@ -18,18 +18,15 @@ public class TesteAPI {
 	private TikTak tiktak;
 	private String usuario;
 	private String evento;
-	private String diretorio = "";
-	private String sistema = "testes";
 
 	@Before
 	public void setUp() throws Exception {
-		this.tiktak = new TikTak(sistema);
+		this.tiktak = new TikTak("testes");
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		excluiArquivoCriadoParaTeste();
-		excluiDiretorioCriadoParaTeste();
+		// excluiArquivoCriadoParaTeste(nomeDoArquivo);
 	}
 
 	public void setUsuario() {
@@ -40,17 +37,20 @@ public class TesteAPI {
 		this.evento = "TESTE-API-NOVO" + System.currentTimeMillis();
 	}
 
-	public String resultadoDaChamadaDoAPI() {
+	public String resultadoDaChamadaDoAPIPadraov2(final String arquivo) {
 		setUsuario();
 		setEvento();
+
 		tiktak.log(this.usuario, this.evento);
-		return carregarConteudoArquivo();
+
+		return carregarConteudoArquivo(arquivo);
 	}
 
-	private String carregarConteudoArquivo() {
+	private String carregarConteudoArquivo(final String arquivo) {
+
 		BufferedReader reader;
 		try {
-			reader = new BufferedReader(new FileReader(tiktak.getCaminhoDoArquivo()));
+			reader = new BufferedReader(new FileReader(arquivo));
 			String line = null;
 			StringBuilder stringBuilder = new StringBuilder();
 			String ls = System.getProperty("line.separator");
@@ -67,13 +67,13 @@ public class TesteAPI {
 		return null;
 	}
 
-	private void excluiArquivoCriadoParaTeste() {
-		File arquivo = new File(sistema);
+	private void excluiArquivoCriadoParaTeste(final String nomeArquivo) {
+		File arquivo = new File(nomeArquivo);
 		arquivo.delete();
 	}
 
-	private void excluiDiretorioCriadoParaTeste() {
-		File diretorio = new File(this.diretorio);
+	private void excluiDiretorioCriadoParaTeste(final String nomeDiretorio) {
+		File diretorio = new File(nomeDiretorio);
 		String nomeDiretorioAbsoluto = diretorio.getAbsolutePath();
 		File diretorioAbsoluto = new File(nomeDiretorioAbsoluto);
 		for (File arquivo : diretorioAbsoluto.listFiles()) {
@@ -82,6 +82,7 @@ public class TesteAPI {
 		if (diretorio.isDirectory()) {
 			diretorioAbsoluto.delete();
 		}
+
 	}
 
 	@Test
@@ -91,35 +92,49 @@ public class TesteAPI {
 	
 	@Test
 	public void testeVerificarSetDirv() {
+		setUsuario();
+		setEvento();
+		String diretorio = "tiktakdir/";
 		tiktak.setDir(diretorio);
-		String pathDoArquivo = tiktak.getCaminhoDoArquivo();
-		resultadoDaChamadaDoAPI();
-		assertTrue(pathDoArquivo.contains(diretorio));
+		String nomeDoArquivo = tiktak.getCaminhoDoArquivo();
+
+		resultadoDaChamadaDoAPIPadraov2(nomeDoArquivo);
+
+		assertTrue(nomeDoArquivo.contains(diretorio));
+
+		excluiArquivoCriadoParaTeste(nomeDoArquivo);
+		excluiDiretorioCriadoParaTeste(diretorio);
 	}
 
 	@Test
-	public void testeVerificarUsuario() {
-		String conteudoArquivo = resultadoDaChamadaDoAPI();
+	public void testeVerificarUsuarioPadraov2() {
+		String nomeDoArquivo = tiktak.getCaminhoDoArquivo();
+		String conteudoArquivo = resultadoDaChamadaDoAPIPadraov2(nomeDoArquivo);
+		System.out.println("ConteudoArquivo: " + conteudoArquivo);
+		System.out.println("Usuario: " + this.usuario);
 		assertTrue(conteudoArquivo.contains(this.usuario));
 	}
 
 	@Test
-	public void testeVerificarEvento() {
-		String conteudoArquivo = resultadoDaChamadaDoAPI();
+	public void testeVerificarEventoPadraov2() {
+		String nomeDoArquivo = tiktak.getCaminhoDoArquivo();
+		String conteudoArquivo = resultadoDaChamadaDoAPIPadraov2(nomeDoArquivo);
 		assertTrue(conteudoArquivo.contains(this.evento));
+		excluiArquivoCriadoParaTeste(nomeDoArquivo);
 	}
 
 	@Test
-	public void testeVerificarArquivo() {
-		String conteudoArquivo = resultadoDaChamadaDoAPI();
-		conteudoArquivo = carregarConteudoArquivo();
-		assertTrue(conteudoArquivo.contains(sistema));
+	public void testeVerificarArquivov2() {
+		setUsuario();
+		setEvento();
+		String nomeDoArquivo = tiktak.getCaminhoDoArquivo();
+
+		String conteudoArquivo = resultadoDaChamadaDoAPIPadraov2(nomeDoArquivo);
+
+		conteudoArquivo = carregarConteudoArquivo(nomeDoArquivo);
+		assertTrue(conteudoArquivo.contains("testes"));
 		assertTrue(conteudoArquivo.contains(this.evento));
-	}
-	
-	@Test
-	public void testaSepathDoArquivoEhTikPontoTak() {
-		String caminhoDoArquivo = this.tiktak.getCaminhoDoArquivo();
-		assertTrue(caminhoDoArquivo.contains("tik.tak"));
+
+		excluiArquivoCriadoParaTeste(nomeDoArquivo);
 	}
 }

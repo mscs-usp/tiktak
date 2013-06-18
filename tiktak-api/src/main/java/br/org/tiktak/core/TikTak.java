@@ -7,14 +7,17 @@ import java.io.RandomAccessFile;
 public class TikTak {
 	private String caminhoDoDiretorio;
 	private String caminhoDoArquivo;
+	private String nomeDoSistema;
 	private File arquivo;
-	private Eventv2 eventov2;
+	private final Eventv2 eventov2;
 	private String usuario;
 	private String evento;
 		
+	//fix-me 
 	public TikTak (final String sistema) {
 		caminhoDoDiretorio = "";
 		caminhoDoArquivo = "";
+		nomeDoSistema = sistema;
 		// Implementado como um singleton
 		this.eventov2 = Eventv2.getInstance();
 		this.eventov2.Init(sistema);
@@ -29,7 +32,20 @@ public class TikTak {
 	}
 	
 	public TikTak(){
-		this("System");
+		caminhoDoDiretorio = "";
+		caminhoDoArquivo = "";
+		nomeDoSistema = "tik";
+		// Implementado como um singleton
+		this.eventov2 = Eventv2.getInstance();
+		this.eventov2.Init("tik");
+		try {
+			obterCaminhoDoDiretorio();
+			criarDiretorioLog();
+			obterCaminhoDoArquivo();
+			criarArquivoLog();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String getCaminhoDoArquivo() {
@@ -150,17 +166,21 @@ public class TikTak {
 	}
 
 	private String obterCaminhoDoArquivo() throws IOException {
+		String arquivo = "";
 		String parametroSetArquivo, parametroGetProperty;
-		parametroSetArquivo = "tik.tak";
+
+		parametroSetArquivo = this.nomeDoSistema;
 		parametroGetProperty = System.getProperty("tiktak.system");
 		if (parametroSetArquivo != null) {
-			caminhoDoArquivo = this.caminhoDoDiretorio + parametroSetArquivo;
+			nomeDoSistema = this.caminhoDoDiretorio + parametroSetArquivo;
 		} else if (parametroGetProperty != null) {
-			caminhoDoArquivo = this.caminhoDoDiretorio + parametroGetProperty;
+			nomeDoSistema = this.caminhoDoDiretorio + parametroGetProperty;
 		} else {
-			caminhoDoArquivo = this.caminhoDoDiretorio + "DefaultSystem";
+			nomeDoSistema = this.caminhoDoDiretorio + "DefaultSystem";
 		}
-		return caminhoDoArquivo;
+		arquivo = nomeDoSistema + ".tak";
+		this.caminhoDoArquivo = arquivo;
+		return arquivo;
 	}
 
 	private File criarArquivoLog() throws IOException {
@@ -177,5 +197,4 @@ public class TikTak {
 		}
 		return arquivo;
 	}
-
 }
