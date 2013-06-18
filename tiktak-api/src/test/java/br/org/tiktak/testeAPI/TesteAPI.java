@@ -18,8 +18,8 @@ public class TesteAPI {
 	private TikTak tiktak;
 	private String usuario;
 	private String evento;
-	private String diretorio = "";
-	private String sistema = "testes";
+	private final String diretorio = "";
+	private final String sistema = "testes";
 
 	@Before
 	public void setUp() throws Exception {
@@ -88,7 +88,7 @@ public class TesteAPI {
 	public void testaConstrutorPadrao() {
 		new TikTak();
 	}
-	
+
 	@Test
 	public void testeVerificarSetDirv() {
 		tiktak.setDir(diretorio);
@@ -116,9 +116,9 @@ public class TesteAPI {
 		assertTrue(conteudoArquivo.contains(sistema));
 		assertTrue(conteudoArquivo.contains(this.evento));
 	}
-	
+
 	@Test
-	public void testaSepathDoArquivoEhTikPontoTak() {
+	public void testaSePathDoArquivoEhTikPontoTak() {
 		String caminhoDoArquivo = this.tiktak.getCaminhoDoArquivo();
 		assertTrue(caminhoDoArquivo.contains("tik.tak"));
 	}
