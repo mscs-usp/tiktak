@@ -86,6 +86,11 @@ public class TesteAPI {
 	}
 
 	@Test
+	public void testaConstrutorPadrao() {
+		new TikTak();
+	}
+	
+	@Test
 	public void testeVerificarSetDirv() {
 		setUsuario();
 		setEvento();
