@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -16,24 +17,24 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 /**
- * Testa se o conteudo do arquivo coincide com os dados colocados na tela em um determinado evento.
- * obs: supõe que a aplicação simulacaoCliente esteja "em pé".
+ * Testa se o conteudo do arquivo coincide com os dados colocados na tela em um
+ * determinado evento. obs: supõe que a aplicação simulacaoCliente esteja
+ * "em pé".
+ * 
  * @author leo.oliveira
- *
+ * 
  */
 public class TesteConteudoSimulacaoCliente {
 	private WebDriver driver;
 	private String baseUrl;
-	private boolean acceptNextAlert = true;
-	private StringBuffer verificationErrors = new StringBuffer();
+	private final StringBuffer verificationErrors = new StringBuffer();
 
 	@Before
 	public void setUp() throws Exception {
 		driver = new FirefoxDriver();
 		baseUrl = "http://localhost:8888";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-		
-		
+
 	}
 
 	@Test
@@ -52,20 +53,18 @@ public class TesteConteudoSimulacaoCliente {
 		driver.findElement(By.name("txt_funcionalidade")).clear();
 		driver.findElement(By.name("txt_funcionalidade")).sendKeys(funcionalidade);
 		driver.findElement(By.xpath("//input[@value='Enviar']")).click();
-		String conteudoArquivo = carrega("Simulacao.tak");
-		//Boolean resultado = conteudoArquivo.contains(usuario);
+		String conteudoArquivo = carrega("tik.tak");
 		assertTrue(conteudoArquivo.contains(usuario));
 		assertTrue(conteudoArquivo.contains(funcionalidade));
 	}
 
-	private String carrega(String arquivo) throws IOException {
-		// TODO Auto-generated method stub
+	private String carrega(final String arquivo) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(arquivo));
 		String line = null;
 		StringBuilder stringBuilder = new StringBuilder();
 		String ls = System.getProperty("line.separator");
 
-		while ((line = reader.readLine()) != null ) {
+		while ((line = reader.readLine()) != null) {
 			stringBuilder.append(line);
 			stringBuilder.append(ls);
 		}
@@ -74,6 +73,8 @@ public class TesteConteudoSimulacaoCliente {
 
 	@After
 	public void tearDown() throws Exception {
+		File arquivo = new File("tik.tak");
+		arquivo.delete();
 		driver.quit();
 		String verificationErrorString = verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
