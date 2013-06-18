@@ -90,6 +90,12 @@ public class TesteAPI {
 	}
 
 	@Test
+	public void testeSetDirVazio() {
+		tiktak.setDir("");
+		assertTrue(!tiktak.getCaminhoDoArquivo().contains("/"));
+	}
+	
+	@Test
 	public void testeVerificarSetDirv() {
 		tiktak.setDir(diretorio);
 		String pathDoArquivo = tiktak.getCaminhoDoArquivo();

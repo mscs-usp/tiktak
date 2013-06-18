@@ -37,7 +37,10 @@ public class TikTak {
 	}
 
 	public void setDir(String nomeDoDiretorio) {
-		if (!nomeDoDiretorio.endsWith("/")) {
+		if(nomeDoDiretorio.equals("")){
+			
+		}
+		else if (!nomeDoDiretorio.endsWith("/")) {
 			nomeDoDiretorio += "/";
 		}
 		this.caminhoDoDiretorio = nomeDoDiretorio;
