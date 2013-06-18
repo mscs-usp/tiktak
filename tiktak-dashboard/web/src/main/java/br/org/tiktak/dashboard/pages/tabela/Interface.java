@@ -13,6 +13,7 @@ import javax.swing.text.html.CSS;
 
 import jmine.tec.web.wicket.pages.Template;
 
+import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.request.resource.PackageResourceReference;
@@ -39,7 +40,7 @@ public class Interface extends Template {
 		try {
 			ProcessamentoArquivo processador = new ProcessamentoArquivo();
 			Set<String> nomesSistemas = processador.getNomesSistemas();
-			List tabs = new ArrayList();
+			List<TabDeSistema> tabs = new ArrayList<TabDeSistema>();
 
 			for (String nomeDoSistema : nomesSistemas)
 				tabs.add(new TabDeSistema(nomeDoSistema));
