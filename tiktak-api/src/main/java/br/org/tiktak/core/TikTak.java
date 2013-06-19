@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class TikTak {
+	private String caminhoPadraoDoDiretorio;
 	private String caminhoDoDiretorio;
 	private String caminhoDoArquivo;
 	private String sistemaAPI;
@@ -14,7 +15,8 @@ public class TikTak {
 	private String evento;
 		
 	public TikTak (final String sistema) {
-		caminhoDoDiretorio = System.getProperty("user.dir");
+		caminhoPadraoDoDiretorio = System.getProperty("user.dir") + "/";
+		caminhoDoDiretorio = "";
 		caminhoDoArquivo = "";
 		sistemaAPI = sistema;
 		obterECriarNoDisco();
@@ -32,7 +34,7 @@ public class TikTak {
 
 	public void setDir(String nomeDoDiretorio) {
 		if(nomeDoDiretorio.equals("")){
-			
+			nomeDoDiretorio = caminhoPadraoDoDiretorio;
 		}
 		else if (!nomeDoDiretorio.endsWith("/")) {
 			nomeDoDiretorio += "/";
@@ -129,6 +131,8 @@ public class TikTak {
 			caminhoDoDiretorio = parametroSetDir;
 		} else if (parametroGetProperty != null) {
 			caminhoDoDiretorio = parametroGetProperty;
+		} else {
+			caminhoDoDiretorio = caminhoPadraoDoDiretorio;
 		}
 		
 		if (!caminhoDoDiretorio.endsWith("/")) {

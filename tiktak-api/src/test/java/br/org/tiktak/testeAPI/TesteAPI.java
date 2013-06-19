@@ -18,7 +18,7 @@ public class TesteAPI {
 	private TikTak tiktak;
 	private String usuario;
 	private String evento;
-	private final String diretorio = "";
+	private String diretorio = "";
 	private final String sistema = "testes";
 
 	@Before
@@ -73,13 +73,14 @@ public class TesteAPI {
 	}
 
 	private void excluiDiretorioCriadoParaTeste() {
+		this.diretorio = "tiktakdir/";
 		File diretorio = new File(this.diretorio);
 		String nomeDiretorioAbsoluto = diretorio.getAbsolutePath();
 		File diretorioAbsoluto = new File(nomeDiretorioAbsoluto);
-		for (File arquivo : diretorioAbsoluto.listFiles()) {
-			arquivo.delete();
-		}
 		if (diretorio.isDirectory()) {
+			for (File arquivo : diretorioAbsoluto.listFiles()) {
+				arquivo.delete();
+			}
 			diretorioAbsoluto.delete();
 		}
 	}
@@ -92,7 +93,7 @@ public class TesteAPI {
 	@Test
 	public void testeSetDirVazio() {
 		tiktak.setDir("");
-		assertTrue(!tiktak.getCaminhoDoArquivo().contains("/"));
+		assertTrue(!tiktak.getCaminhoDoArquivo().equals(""));
 	}
 	
 	@Test
