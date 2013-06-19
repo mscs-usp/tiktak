@@ -19,28 +19,13 @@ public class TikTak {
 		caminhoDoDiretorio = "";
 		caminhoDoArquivo = "";
 		sistemaAPI = sistema;
-		obterECriarNoDisco();
 		this.eventov2 = Eventv2.getInstance();
 		this.eventov2.init(sistemaAPI);
+		obterECriarNoDisco();
 	}
 	
 	public TikTak(){
 		this("System");
-	}
-
-	public String getCaminhoDoArquivo() {
-		return caminhoDoArquivo;
-	}
-
-	public void setDir(String nomeDoDiretorio) {
-		if(nomeDoDiretorio.equals("")){
-			nomeDoDiretorio = caminhoPadraoDoDiretorio;
-		}
-		else if (!nomeDoDiretorio.endsWith("/")) {
-			nomeDoDiretorio += "/";
-		}
-		this.caminhoDoDiretorio = nomeDoDiretorio;
-		obterECriarNoDisco();
 	}
 
 	public void obterECriarNoDisco() {
@@ -53,14 +38,59 @@ public class TikTak {
 			e.printStackTrace();
 		}
 	}
+	
+	private String obterCaminhoDoDiretorio() throws IOException {
+		String parametroSetDir, parametroGetProperty;		
+		parametroSetDir = this.caminhoDoDiretorio;
+		parametroGetProperty = System.getProperty("tiktak.dir");
+		if (parametroSetDir != null && !parametroSetDir.equals("")) {
+			caminhoDoDiretorio = parametroSetDir;
+		} else if (parametroGetProperty != null) {
+			caminhoDoDiretorio = parametroGetProperty;
+		} else {
+			caminhoDoDiretorio = caminhoPadraoDoDiretorio;
+		}		
+		if (!caminhoDoDiretorio.endsWith("/")) {
+			caminhoDoDiretorio += "/";
+		}
+		return caminhoDoDiretorio;
+	}
+	
+	private String criarDiretorioLog() throws IOException {
+		String diretorio = caminhoDoDiretorio;
+		if (diretorio != "") {
+			File diretorioFisico = new File(diretorio);			
+			if (!diretorioFisico.exists()) {
+				diretorioFisico.mkdir();
+			}
+		}
+		return diretorio;
+	}
+	
+	private String obterCaminhoDoArquivo() throws IOException {
+		String parametroSetArquivo;
+		parametroSetArquivo = "tik.tak";		
+		caminhoDoArquivo = this.caminhoDoDiretorio + parametroSetArquivo;		
+		return caminhoDoArquivo;
+	}
+	
+	private File criarArquivoLog() throws IOException {
+		arquivo = new File(this.caminhoDoArquivo);
+		if (!arquivo.exists()) {
+			arquivo.createNewFile();
+			RandomAccessFile writer = new RandomAccessFile(arquivo, "rw");
+			String json = GsonFactory.getGson().toJson(eventov2) + "\n";
+			writer.write(json.getBytes());
+			writer.close();
+		}
+		return arquivo;
+	}
 
-	public void log(final String usuario, final String nomeDoEvento) {
-		this.usuario = usuario;
+	public void log(final String usuario, final String nomeDoEvento) { 
 		this.evento = nomeDoEvento;
 		String json, jsonEventos;
-
 		try {
-			criarArquivoLog();
+		criarArquivoLog();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -95,86 +125,24 @@ public class TikTak {
 			RandomAccessFile raf = new RandomAccessFile(arquivo, "rw");
 			String linha = raf.readLine();
 			count = linha.split("\\{", -1).length - 1;
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return ((!estaVaziov2) && (count == 1));
 	}
 
-	private void concatenarJson(final String json) {
-		try {
-			RandomAccessFile raf = new RandomAccessFile(arquivo, "rw");
-			raf.readLine();
-			char c = raf.readLine().charAt(0);
-			boolean estaVazio1 = c == ']';
-			if (estaVazio1) {
-				raf.seek(2);
-				raf.write(json.getBytes());
-			} else {
-				raf.seek(raf.length() - 2);
-				raf.write((",\n" + json).getBytes());
-			}
-			raf.write("]".getBytes());
-			raf.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private String obterCaminhoDoDiretorio() throws IOException {
-		String parametroSetDir, parametroGetProperty;
-
-		parametroSetDir = this.caminhoDoDiretorio;
-		parametroGetProperty = System.getProperty("tiktak.dir");
-		if (parametroSetDir != null && !parametroSetDir.equals("")) {
-			caminhoDoDiretorio = parametroSetDir;
-		} else if (parametroGetProperty != null) {
-			caminhoDoDiretorio = parametroGetProperty;
-		} else {
-			caminhoDoDiretorio = caminhoPadraoDoDiretorio;
-		}
-		
-		if (!caminhoDoDiretorio.endsWith("/")) {
-			caminhoDoDiretorio += "/";
-		}
-		return caminhoDoDiretorio;
-	}
-
-	private String criarDiretorioLog() throws IOException {
-		String diretorio = caminhoDoDiretorio;
-		if (diretorio != "") {
-			File diretorioFisico = new File(diretorio);
-
-			if (!diretorioFisico.exists()) {
-				diretorioFisico.mkdir();
-			}
-		}
-		return diretorio;
-	}
-
-	private String obterCaminhoDoArquivo() throws IOException {
-		String parametroSetArquivo;
-		parametroSetArquivo = "tik.tak";
-		
-		caminhoDoArquivo = this.caminhoDoDiretorio + parametroSetArquivo;
-		
+	public String getCaminhoDoArquivo() {
 		return caminhoDoArquivo;
 	}
 
-	private File criarArquivoLog() throws IOException {
-		arquivo = new File(this.caminhoDoArquivo);
-		if (!arquivo.exists()) {
-			arquivo.createNewFile();
-			RandomAccessFile writer = new RandomAccessFile(arquivo, "rw");
-
-			Event evento = new Event(this.usuario, this.evento);
-			String json = GsonFactory.getGson().toJson(eventov2) + "\n";
-
-			writer.write(json.getBytes());
-			writer.close();
+	public void setDir(String nomeDoDiretorio) {
+		if(nomeDoDiretorio.equals("")){
+			nomeDoDiretorio = caminhoPadraoDoDiretorio;
 		}
-		return arquivo;
+		else if (!nomeDoDiretorio.endsWith("/")) {
+			nomeDoDiretorio += "/";
+		}
+		this.caminhoDoDiretorio = nomeDoDiretorio;
+		obterECriarNoDisco();
 	}
-
 }
