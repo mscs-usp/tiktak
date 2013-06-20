@@ -194,6 +194,10 @@ public class TikTak {
 	public String getCaminhoDoArquivo() {
 		return caminhoDoArquivo;
 	}
+	
+	public String getCaminhoDoDiretorio() {
+		return caminhoDoDiretorio;
+	}
 
 	public void setDir(String nomeDoDiretorio) {
 		if(nomeDoDiretorio.equals("")){
