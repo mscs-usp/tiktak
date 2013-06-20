@@ -12,7 +12,9 @@ import java.io.RandomAccessFile;
 import java.util.Properties;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import br.org.tiktak.core.TikTak;
@@ -22,6 +24,7 @@ public class TesteAPI {
 	private String usuario;
 	private String evento;
 	private String diretorio = "";
+	private static String systemPropertyTiktakDir = "";
 	private final String sistema = "testes";
 
 	@Before
@@ -33,6 +36,16 @@ public class TesteAPI {
 	public void tearDown() throws Exception {
 		excluiArquivoCriadoParaTeste();
 		excluiDiretorioCriadoParaTeste();
+	}
+	
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		systemPropertyTiktakDir = System.getProperty("tiktak.dir");
+	}
+	
+	@AfterClass
+	public static void tearDownClass() throws Exception {
+		System.setProperty("tiktak.dir", systemPropertyTiktakDir); 
 	}
 
 	public void setUsuario() {
@@ -143,32 +156,66 @@ public class TesteAPI {
 	}
 	
 	@Test
-	public void testaLeituraDoArquivoPontoProperties() {
-		File arquivo = new File("tiktak.properties");
+	public void testaHierarquiaDePropriedadesParaDiretorio() {
+		String diretorioPadrao = System.getProperty("user.dir") + "/";
+		String testDir = diretorioPadrao + "setDir/";
+		String testPropertiesFileDir = diretorioPadrao;// + "propertiesFile/";
+		String testSystemPropertiesDir = diretorioPadrao + "systemProperty/";
+
+		criarArquivoDeProperties(testPropertiesFileDir);
+		System.setProperty("tiktak.dir", testSystemPropertiesDir);
+		
+		// Primeira prioridade: programatico	ok
+		TikTak tiktakLocal = new TikTak();
+		String caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
+		tiktakLocal.setDir(testDir);
+		caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
+		assertTrue(caminhoDoDiretorio.equals(testDir));
+		
+		// Segunda prioridade: tiktak.properties
+		// Fixme: dar uma olhada
+		tiktakLocal = new TikTak();
+		caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
+		assertTrue(caminhoDoDiretorio.equals(testPropertiesFileDir));
+		excluiArquivoDeProperties(testPropertiesFileDir);
+		
+		// Terceira prioridade: setProperty
+		tiktakLocal = new TikTak();
+		caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
+		assertTrue(caminhoDoDiretorio.equals(testSystemPropertiesDir));
+		System.setProperty("tiktak.dir", "");
+		
+		// Quarta prioridade: default
+		tiktakLocal = new TikTak();
+		assertTrue(caminhoDoDiretorio.equals(diretorioPadrao));
+	}
+	
+	private void excluiArquivoDeProperties(String dir){
+		File arquivo = new File(dir + "tiktak.properties");
+		if(arquivo.exists())
+			arquivo.delete();
+	}
+
+	private void criarArquivoDeProperties(String testDir) {
+		File arquivo = new File(testDir + "tiktak.properties");
 		FileInputStream fis;
 		Boolean crieiArquivo = false;
 		try {
+			File diretorioFisico = new File(testDir);			
+			if (!diretorioFisico.exists()) {
+				diretorioFisico.mkdir();
+			}
 			if(!arquivo.exists()){
 				arquivo.createNewFile();
 				crieiArquivo = true;
 				RandomAccessFile raf = new RandomAccessFile(arquivo, "rw");
-				String caminho = "tiktak.dir=" + System.getProperty("user.dir"); 
+				String caminho = "tiktak.dir=" + testDir; 
 				raf.write(caminho.getBytes());
 				raf.close();
 			}
-			fis = new FileInputStream(arquivo);
-			Properties properties = new Properties();
-			properties.load(fis);
-			String property = properties.getProperty("tiktak.dir");
-			assertTrue(property != null && !property.equals(""));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally{
-			if(crieiArquivo){
-				arquivo.delete();
-			}
 		}
-		
 	}
-	
 }
