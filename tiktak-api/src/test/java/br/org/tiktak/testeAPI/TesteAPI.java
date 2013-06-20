@@ -4,9 +4,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.Properties;
 
 import org.junit.After;
 import org.junit.Before;
@@ -129,4 +132,34 @@ public class TesteAPI {
 		String caminhoDoArquivo = this.tiktak.getCaminhoDoArquivo();
 		assertTrue(caminhoDoArquivo.contains("tik.tak"));
 	}
+	
+	@Test
+	public void testaLeituraDoArquivoPontoProperties() {
+		File arquivo = new File("tiktak.properties");
+		FileInputStream fis;
+		Boolean crieiArquivo = false;
+		try {
+			if(!arquivo.exists()){
+				arquivo.createNewFile();
+				crieiArquivo = true;
+				RandomAccessFile raf = new RandomAccessFile(arquivo, "rw");
+				String caminho = "tiktak.dir=" + System.getProperty("user.dir"); 
+				raf.write(caminho.getBytes());
+				raf.close();
+			}
+			fis = new FileInputStream(arquivo);
+			Properties properties = new Properties();
+			properties.load(fis);
+			String property = properties.getProperty("tiktak.dir");
+			assertTrue(property != null && !property.equals(""));
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			if(crieiArquivo){
+				arquivo.delete();
+			}
+		}
+		
+	}
+	
 }

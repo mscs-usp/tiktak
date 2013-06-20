@@ -1,8 +1,11 @@
 package br.org.tiktak.core;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Properties;
 
 public class TikTak {
 	private String caminhoPadraoDoDiretorio;
@@ -40,11 +43,16 @@ public class TikTak {
 	}
 	
 	private String obterCaminhoDoDiretorio() throws IOException {
-		String parametroSetDir, parametroGetProperty;		
+		String parametroSetDir, parametroGetProperty, parametroFileProperties;
+		
+		parametroFileProperties = obterArquivoDeProperties();
 		parametroSetDir = this.caminhoDoDiretorio;
 		parametroGetProperty = System.getProperty("tiktak.dir");
+		
 		if (parametroSetDir != null && !parametroSetDir.equals("")) {
 			caminhoDoDiretorio = parametroSetDir;
+		} else if (parametroFileProperties != null && !parametroFileProperties.equals("")) {
+			caminhoDoDiretorio = parametroFileProperties;
 		} else if (parametroGetProperty != null) {
 			caminhoDoDiretorio = parametroGetProperty;
 		} else {
@@ -54,6 +62,22 @@ public class TikTak {
 			caminhoDoDiretorio += "/";
 		}
 		return caminhoDoDiretorio;
+	}
+
+	private String obterArquivoDeProperties() {
+		String property;
+		File arquivo = new File("tiktak.properties");
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(arquivo);
+			Properties properties = new Properties();
+			properties.load(fis);
+			property = properties.getProperty("tiktak.dir");
+		} catch (Exception e) {
+			property = null;
+		}
+		
+		return property;
 	}
 	
 	private String criarDiretorioLog() throws IOException {
