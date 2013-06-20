@@ -1,27 +1,33 @@
 package br.org.tiktak.dashboard.pages.remocao;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.wicket.markup.html.WebPage;
+import jmine.tec.web.wicket.pages.Template;
+
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import com.google.gson.reflect.TypeToken;
 
 import bancosys.tec.exception.MessageCreator;
-import jmine.tec.web.wicket.pages.Template;
+import br.org.tiktak.core.Eventv2;
+import br.org.tiktak.core.GsonFactory;
 import br.org.tiktak.dashboard.core.ProcessamentoArquivo;
-import br.org.tiktak.dashboard.pages.tabela.TabDeSistema;
 
 public class RemocaoSistema extends Template {
 
 	private List<String> listaDeSistemas;
 	private String sistemaEscolhido;
+	private FileReader reader;
  
 	@Override
 	protected void onInitialize() {
@@ -38,18 +44,42 @@ public class RemocaoSistema extends Template {
 		}
 		add(new FeedbackPanel("feedback")); 
 		DropDownChoice<String> listSites = new DropDownChoice<String>(
-			"sites", new PropertyModel<String>(this, "selected"), listaDeSistemas); 
+			"sistemas", new PropertyModel<String>(this, "sistemaEscolhido"), listaDeSistemas); 
 		Form<Void> form = new Form<Void>("form") {
 			@Override
 			protected void onSubmit() { 
+				removeSistema(sistemaEscolhido);
 				info("O sitema " + sistemaEscolhido + " foi excluido."); 
 			}
 		}; 
 		add(form);
-		removeSistema(nomeDosistema);
 		form.add(listSites); 
 	}
+	
+	public void removeSistema(String sistemaEscolhido){
+		try {
+			RandomAccessFile raf = new RandomAccessFile(new File("dashboard.bd"), "rw");
+			File arquivoAuxiliar = criaArquivoAuxiliar();
+			RandomAccessFile rafAux = new RandomAccessFile(arquivoAuxiliar, "rw");
+			//TODO copiar todos os sistemas diferentes do sistemaEscolhido para o arquivo auxiliar
+			//excluir dashboard.bd e renomear o arquivo auxilliar para dashboard.bd
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
+	private File criaArquivoAuxiliar() {
+		File arquivoAuxiliar = new File("arquivoAuxiliar.bd");
+		try {
+			arquivoAuxiliar.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return arquivoAuxiliar;
+	}
+	
 	@Override
 	protected MessageCreator getHelpTextCreator() {
 		return null;
