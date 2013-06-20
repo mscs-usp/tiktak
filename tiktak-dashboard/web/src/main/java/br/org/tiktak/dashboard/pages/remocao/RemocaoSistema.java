@@ -16,41 +16,42 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import bancosys.tec.exception.MessageCreator;
 import jmine.tec.web.wicket.pages.Template;
 import br.org.tiktak.dashboard.core.ProcessamentoArquivo;
+import br.org.tiktak.dashboard.pages.tabela.TabDeSistema;
 
 public class RemocaoSistema extends Template {
 
-	private static final List<String> SEARCH_ENGINES = Arrays.asList(new String[] {
-			"Google", "Bing", "Baidu" });
- 
-	//make Google selected by default
-	private String selected = "Google";
+	private List<String> listaDeSistemas;
+	private String sistemaEscolhido;
  
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
- 
-		add(new FeedbackPanel("feedback"));
- 
+		super.onInitialize(); 
+		listaDeSistemas = new ArrayList<String>();
+		try {
+			ProcessamentoArquivo processamentoArquivo = new ProcessamentoArquivo();
+			Set<String> setDeSistemas = processamentoArquivo.getNomesSistemas();
+			for (String nomeDoSistema : setDeSistemas)
+				listaDeSistemas.add(nomeDoSistema);
+			sistemaEscolhido = listaDeSistemas.get(0);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		add(new FeedbackPanel("feedback")); 
 		DropDownChoice<String> listSites = new DropDownChoice<String>(
-			"sites", new PropertyModel<String>(this, "selected"), SEARCH_ENGINES);
- 
-		Form<?> form = new Form<Void>("form") {
+			"sites", new PropertyModel<String>(this, "selected"), listaDeSistemas); 
+		Form<Void> form = new Form<Void>("form") {
 			@Override
-			protected void onSubmit() {
- 
-				info("Selected search engine : " + selected);
- 
+			protected void onSubmit() { 
+				info("O sitema " + sistemaEscolhido + " foi excluido."); 
 			}
-		};
- 
+		}; 
 		add(form);
-		form.add(listSites);
- 
+		removeSistema(nomeDosistema);
+		form.add(listSites); 
 	}
 
 	@Override
 	protected MessageCreator getHelpTextCreator() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
