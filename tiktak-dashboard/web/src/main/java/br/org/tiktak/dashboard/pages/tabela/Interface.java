@@ -37,18 +37,19 @@ public class Interface extends Template {
 	protected void onInitialize() {
 		super.onInitialize();
 
+		List<TabDeSistema> tabs = new ArrayList<TabDeSistema>();
 		try {
 			ProcessamentoArquivo processador = new ProcessamentoArquivo();
 			Set<String> nomesSistemas = processador.getNomesSistemas();
-			List<TabDeSistema> tabs = new ArrayList<TabDeSistema>();
 
 			for (String nomeDoSistema : nomesSistemas)
 				tabs.add(new TabDeSistema(nomeDoSistema));
 
-			add(new TabbedPanel("tabs", tabs));
+			
 		} catch (FileNotFoundException e) {
 
 		}
+		add(new TabbedPanel("tabs", tabs));
 	}
 
 	/*@Override
