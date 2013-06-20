@@ -2,10 +2,15 @@ package br.org.tiktak.core;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Properties;
+
+import javax.sql.rowset.WebRowSet;
+
+import br.org.tiktak.escritores.Escritor;
+import br.org.tiktak.escritores.EscritorArquivo;
+import br.org.tiktak.escritores.EscritorWS;
 
 public class TikTak {
 	private String caminhoPadraoDoDiretorio;
@@ -17,6 +22,10 @@ public class TikTak {
 	private String usuario;
 	private String evento;
 		
+	private Escritor escritor;
+	private String exporter;
+	private String wsurl;
+	
 	public TikTak (final String sistema) {
 		caminhoPadraoDoDiretorio = System.getProperty("user.dir") + "/";
 		caminhoDoDiretorio = "";
@@ -95,11 +104,13 @@ public class TikTak {
 		String parametroSetArquivo;
 		parametroSetArquivo = "tik.tak";		
 		caminhoDoArquivo = this.caminhoDoDiretorio + parametroSetArquivo;	
-		String exporter = obterPropriedadeDoArquivoDeProperties("tiktak.exporter");
-		String wsurl = null;
+		exporter = obterPropriedadeDoArquivoDeProperties("tiktak.exporter");
 		if(exporter != null && exporter.equals("webservice")){
 			wsurl = obterPropriedadeDoArquivoDeProperties("tiktak.ws-url");
 		}
+		else{
+			exporter = "file";
+		} 
 		return caminhoDoArquivo;
 	}
 	
@@ -129,6 +140,18 @@ public class TikTak {
 			jsonEventos = GsonFactory.getGson().toJson(evento);
 		}
 		concatenarJson(json, jsonEventos);
+	}
+	
+	public void logTeste(final String usuario, final String nomeDoEvento){
+		
+		if(exporter.equals("webservice")){
+			escritor = new EscritorWS();
+			escritor.escreve(usuario, nomeDoEvento, wsurl);
+		}
+		else{
+			escritor = new EscritorArquivo();
+			escritor.escreve(usuario, nomeDoEvento, caminhoDoArquivo);
+		}
 	}
 
 	private void concatenarJson(final String json, final String jsonEventos) {

@@ -118,6 +118,15 @@ public class TesteAPI {
 		String conteudoArquivo = resultadoDaChamadaDoAPI();
 		assertTrue(conteudoArquivo.contains(this.evento));
 	}
+	
+	@Test
+	public void testeVerificarLogTeste() {
+		setUsuario();
+		setEvento();
+		tiktak.logTeste(this.usuario, this.evento);
+		String conteudoArquivo = carregarConteudoArquivo();
+		assertTrue(conteudoArquivo.contains(this.evento));
+	}
 
 	@Test
 	public void testeVerificarArquivo() {
