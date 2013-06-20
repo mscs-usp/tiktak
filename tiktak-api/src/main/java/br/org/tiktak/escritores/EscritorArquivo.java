@@ -15,7 +15,7 @@ public class EscritorArquivo extends Escritor {
 	private Eventv2 eventov2;
 	
 	@Override
-	public void escreve(final String usuario, final String nomeDoEvento, final String caminhoDeEscrita) {
+	public void escreve(final String usuario, final String nomeDoEvento, final String caminhoDeEscrita) throws Exception {
 		// TODO Auto-generated method stub
 		caminhoDoArquivo = caminhoDeEscrita;
 		String json, jsonEventos;
