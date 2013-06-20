@@ -4,12 +4,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Properties;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -45,7 +43,12 @@ public class TesteAPI {
 	
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		System.setProperty("tiktak.dir", systemPropertyTiktakDir); 
+		if(systemPropertyTiktakDir == null){
+			System.clearProperty("tiktak.dir");
+		}
+		else{
+			System.setProperty("tiktak.dir", systemPropertyTiktakDir); 
+		}
 	}
 
 	public void setUsuario() {
@@ -165,7 +168,7 @@ public class TesteAPI {
 		criarArquivoDeProperties(testPropertiesFileDir);
 		System.setProperty("tiktak.dir", testSystemPropertiesDir);
 		
-		// Primeira prioridade: programatico	ok
+		// Primeira prisetPropertyoridade: programatico	ok
 		TikTak tiktakLocal = new TikTak();
 		String caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
 		tiktakLocal.setDir(testDir);
@@ -173,7 +176,7 @@ public class TesteAPI {
 		assertTrue(caminhoDoDiretorio.equals(testDir));
 		
 		// Segunda prioridade: tiktak.properties
-		// Fixme: dar uma olhada
+		// FIXME dar uma olhada a onde vocë deve colocar um arquivo .properties?
 		tiktakLocal = new TikTak();
 		caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
 		assertTrue(caminhoDoDiretorio.equals(testPropertiesFileDir));
@@ -183,10 +186,11 @@ public class TesteAPI {
 		tiktakLocal = new TikTak();
 		caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
 		assertTrue(caminhoDoDiretorio.equals(testSystemPropertiesDir));
-		System.setProperty("tiktak.dir", "");
+		System.clearProperty("tiktak.dir");
 		
 		// Quarta prioridade: default
 		tiktakLocal = new TikTak();
+		caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
 		assertTrue(caminhoDoDiretorio.equals(diretorioPadrao));
 	}
 	
@@ -198,8 +202,6 @@ public class TesteAPI {
 
 	private void criarArquivoDeProperties(String testDir) {
 		File arquivo = new File(testDir + "tiktak.properties");
-		FileInputStream fis;
-		Boolean crieiArquivo = false;
 		try {
 			File diretorioFisico = new File(testDir);			
 			if (!diretorioFisico.exists()) {
@@ -207,7 +209,6 @@ public class TesteAPI {
 			}
 			if(!arquivo.exists()){
 				arquivo.createNewFile();
-				crieiArquivo = true;
 				RandomAccessFile raf = new RandomAccessFile(arquivo, "rw");
 				String caminho = "tiktak.dir=" + testDir; 
 				raf.write(caminho.getBytes());

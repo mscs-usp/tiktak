@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Properties;
 
-import javax.sql.rowset.WebRowSet;
-
 import br.org.tiktak.escritores.Escritor;
 import br.org.tiktak.escritores.EscritorArquivo;
 import br.org.tiktak.escritores.EscritorWS;
