@@ -45,7 +45,7 @@ public class TikTak {
 	private String obterCaminhoDoDiretorio() throws IOException {
 		String parametroSetDir, parametroGetProperty, parametroFileProperties;
 		
-		parametroFileProperties = obterArquivoDeProperties();
+		parametroFileProperties = obterPropriedadeDoArquivoDeProperties("tiktak.dir");
 		parametroSetDir = this.caminhoDoDiretorio;
 		parametroGetProperty = System.getProperty("tiktak.dir");
 		
@@ -64,7 +64,7 @@ public class TikTak {
 		return caminhoDoDiretorio;
 	}
 
-	private String obterArquivoDeProperties() {
+	private String obterPropriedadeDoArquivoDeProperties(String propriedade) {
 		String property;
 		File arquivo = new File("tiktak.properties");
 		FileInputStream fis;
@@ -72,7 +72,7 @@ public class TikTak {
 			fis = new FileInputStream(arquivo);
 			Properties properties = new Properties();
 			properties.load(fis);
-			property = properties.getProperty("tiktak.dir");
+			property = properties.getProperty(propriedade);
 		} catch (Exception e) {
 			property = null;
 		}
@@ -94,7 +94,12 @@ public class TikTak {
 	private String obterCaminhoDoArquivo() throws IOException {
 		String parametroSetArquivo;
 		parametroSetArquivo = "tik.tak";		
-		caminhoDoArquivo = this.caminhoDoDiretorio + parametroSetArquivo;		
+		caminhoDoArquivo = this.caminhoDoDiretorio + parametroSetArquivo;	
+		String exporter = obterPropriedadeDoArquivoDeProperties("tiktak.exporter");
+		String wsurl = null;
+		if(exporter != null && exporter.equals("webservice")){
+			wsurl = obterPropriedadeDoArquivoDeProperties("tiktak.ws-url");
+		}
 		return caminhoDoArquivo;
 	}
 	
