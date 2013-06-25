@@ -35,8 +35,7 @@ public class UploadDeArquivo extends Template {
 	HashMap<String, Integer> mapa = new HashMap<String, Integer>();
 	Integer totalDeEventos = 0;
 	Form<Void> form = new Form<Void>("form");
-	Label labelErro = new Label("labelErro", "");
-	
+	Label labelErro = new Label("labelErro", "");	
 	File bdDashboard = new File("dashboard.bd");
 
 	@Override
@@ -47,12 +46,9 @@ public class UploadDeArquivo extends Template {
 
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
-
-		
+		super.onInitialize();		
 		final FileUploadField fileUploadField = new FileUploadField("upload");
-		form.add(fileUploadField);
-		
+		form.add(fileUploadField);		
 		Button button = new Button("botao"){
 			@Override
 			public void onSubmit() {
@@ -79,8 +75,7 @@ public class UploadDeArquivo extends Template {
 		this.add(form);
 	}
 	
-	private void processarArquivo(FileUpload file) throws IOException{
-		
+	private void processarArquivo(FileUpload file) throws IOException{		
 		boolean ehPrimeiroBD = criaArquivoSeNaoExistir(file);
 		if(!ehPrimeiroBD){
 			FileReader reader = new FileReader(file.writeToTempFile());
@@ -96,8 +91,7 @@ public class UploadDeArquivo extends Template {
 				raf.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
-			
+			}			
 		}
 	}	
 	
@@ -107,8 +101,7 @@ public class UploadDeArquivo extends Template {
 				FileReader reader = new FileReader(file.writeToTempFile());
 				Eventv2 sistema = GsonFactory.getGson().fromJson(reader, new TypeToken<Eventv2>() {
 				}.getType());
-				String json = GsonFactory.getGson().toJson(sistema);
-				
+				String json = GsonFactory.getGson().toJson(sistema);				
 				bdDashboard.createNewFile();
 				RandomAccessFile writer = new RandomAccessFile(bdDashboard, "rw");
 				writer.writeBytes("[\n");
@@ -121,12 +114,5 @@ public class UploadDeArquivo extends Template {
 			}
 		}
 		return false;
-	}
-	
-	private void deletaBD(){
-		File bdDashboard = new File("dashboard.bd");
-		if(bdDashboard.exists()){
-			bdDashboard.delete();
-		}
 	}
 }

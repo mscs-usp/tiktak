@@ -68,25 +68,25 @@ public class RemocaoSistema extends Template {
 			File arquivoAuxiliar = criaArquivoAuxiliar();
 			FileWriter fw = new FileWriter(arquivoAuxiliar , true );
 			BufferedWriter bw = new BufferedWriter(fw);			
-				while( leitor.ready() ){
-					linha = leitor.readLine();
-					if(linha.contains("sistema")){
-						if (ehSistemaEscolhido(linha, sistemaEscolhido) == true){
+			while( leitor.ready() ){
+				linha = leitor.readLine();
+				if(linha.contains("sistema")){
+					if (ehSistemaEscolhido(linha, sistemaEscolhido) == true){
+						linha = leitor.readLine();
+						while(leitor.ready() && !linha.contains("sistema")) {
 							linha = leitor.readLine();
-							while(leitor.ready() && !linha.contains("sistema")) {
-								linha = leitor.readLine();
-							}
-						if(!leitor.ready())	excluiuUltimo = true;
 						}
+						if(!leitor.ready())	excluiuUltimo = true;
 					}
-					bw.write( linha );
-					bw.newLine();					
 				}
+				bw.write( linha);
+				bw.newLine();					
+			}
 			bw.close();
 			fw.close();
 			if( excluiuUltimo == true) {
 				RandomAccessFile raf = new RandomAccessFile(arquivoAuxiliar, "rw");
-				raf.seek(raf.length() - 2);
+				raf.seek(raf.length() - 3);
 				raf.write("\n]".getBytes());
 			}
 			File dashboard = new File("dashboard.bd");
@@ -94,10 +94,9 @@ public class RemocaoSistema extends Template {
 			arquivoAuxiliar.delete();
 	        
 		} catch (FileNotFoundException e) {
-
+			e.printStackTrace();
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
