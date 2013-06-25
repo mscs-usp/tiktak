@@ -1,8 +1,11 @@
 package br.org.tiktak.dashboard.pages.remocao;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -57,24 +60,70 @@ public class RemocaoSistema extends Template {
 	}
 	
 	public void removeSistema(String sistemaEscolhido){
-		try {
-			RandomAccessFile raf = new RandomAccessFile(new File("dashboard.bd"), "rw");
+		String linha = "";
+		boolean excluiuUltimo = false;
+		try {				
+			FileReader fileReader = new FileReader("dashboard.bd");
+			BufferedReader leitor = new BufferedReader(fileReader);  
 			File arquivoAuxiliar = criaArquivoAuxiliar();
-			RandomAccessFile rafAux = new RandomAccessFile(arquivoAuxiliar, "rw");
-			//TODO copiar todos os sistemas diferentes do sistemaEscolhido para o arquivo auxiliar
-			//excluir dashboard.bd e renomear o arquivo auxilliar para dashboard.bd
+			FileWriter fw = new FileWriter(arquivoAuxiliar , true );
+			BufferedWriter bw = new BufferedWriter(fw);			
+				while( leitor.ready() ){
+					linha = leitor.readLine();
+					if(linha.contains("sistema")){
+						if (ehSistemaEscolhido(linha, sistemaEscolhido) == true){
+							linha = leitor.readLine();
+							while(leitor.ready() && !linha.contains("sistema")) {
+								linha = leitor.readLine();
+							}
+						if(!leitor.ready())	excluiuUltimo = true;
+						}
+					}
+					bw.write( linha );
+					bw.newLine();					
+				}
+			bw.close();
+			fw.close();
+			if( excluiuUltimo == true) {
+				RandomAccessFile raf = new RandomAccessFile(arquivoAuxiliar, "rw");
+				raf.seek(raf.length() - 2);
+				raf.write("\n]".getBytes());
+			}
+			File dashboard = new File("dashboard.bd");
+			arquivoAuxiliar.renameTo(dashboard);
+			arquivoAuxiliar.delete();
+	        
 		} catch (FileNotFoundException e) {
+
+		}
+		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	}
+
+	private Boolean ehSistemaEscolhido(String linha, String sistemaEscolhido ) {
+		String palavra = "";
+		Integer indice = 0;
+		while(linha.charAt(indice) != ':') {
+			indice++;
+		}
+		indice++;
+		while(linha.charAt(indice) != ',') {
+			palavra =  palavra + linha.charAt(indice);
+			indice++;;
+		}
+		return palavra.contains(sistemaEscolhido);
 	}
 
 	private File criaArquivoAuxiliar() {
 		File arquivoAuxiliar = new File("arquivoAuxiliar.bd");
 		try {
-			arquivoAuxiliar.createNewFile();
+			if (!arquivoAuxiliar.exists()) {
+				arquivoAuxiliar.createNewFile();
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return arquivoAuxiliar;
@@ -84,5 +133,4 @@ public class RemocaoSistema extends Template {
 	protected MessageCreator getHelpTextCreator() {
 		return null;
 	}
-
 }

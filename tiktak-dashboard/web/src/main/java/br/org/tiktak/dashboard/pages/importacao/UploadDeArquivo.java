@@ -104,10 +104,15 @@ public class UploadDeArquivo extends Template {
 	private boolean criaArquivoSeNaoExistir(FileUpload file){
 		if(!bdDashboard.exists()){
 			try {
+				FileReader reader = new FileReader(file.writeToTempFile());
+				Eventv2 sistema = GsonFactory.getGson().fromJson(reader, new TypeToken<Eventv2>() {
+				}.getType());
+				String json = GsonFactory.getGson().toJson(sistema);
+				
 				bdDashboard.createNewFile();
 				RandomAccessFile writer = new RandomAccessFile(bdDashboard, "rw");
 				writer.writeBytes("[\n");
-				writer.write(file.getBytes());
+				writer.write((json+"\n").getBytes());
 				writer.writeBytes("]");
 				writer.close();
 				return true;

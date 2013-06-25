@@ -37,7 +37,6 @@ public class ProcessamentoArquivo {
 				}.getType());
 		for (Eventv2 eventv2 : listaDeEventv2)
 			nomesSistemas.add(eventv2.getSystem());
-
 		return nomesSistemas;
 	}
 }
