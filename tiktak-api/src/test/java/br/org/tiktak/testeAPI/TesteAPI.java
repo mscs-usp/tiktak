@@ -32,22 +32,20 @@ public class TesteAPI {
 
 	@After
 	public void tearDown() throws Exception {
-		excluiArquivoCriadoParaTeste();
 		excluiDiretorioCriadoParaTeste();
 	}
-	
+
 	@BeforeClass
 	public static void setUpClass() throws Exception {
 		systemPropertyTiktakDir = System.getProperty("tiktak.dir");
 	}
-	
+
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		if(systemPropertyTiktakDir == null){
+		if (systemPropertyTiktakDir == null) {
 			System.clearProperty("tiktak.dir");
-		}
-		else{
-			System.setProperty("tiktak.dir", systemPropertyTiktakDir); 
+		} else {
+			System.setProperty("tiktak.dir", systemPropertyTiktakDir);
 		}
 	}
 
@@ -86,22 +84,21 @@ public class TesteAPI {
 		return null;
 	}
 
-	private void excluiArquivoCriadoParaTeste() {
-		File arquivo = new File(sistema);
-		arquivo.delete();
-	}
-
+	// XXX refatorar, muito código repetido
 	private void excluiDiretorioCriadoParaTeste() {
-		this.diretorio = "tiktakdir/";
+		File arquivo = new File("tik.tak");
+		arquivo.delete();
+		diretorio = "setDir";
 		File diretorio = new File(this.diretorio);
-		String nomeDiretorioAbsoluto = diretorio.getAbsolutePath();
-		File diretorioAbsoluto = new File(nomeDiretorioAbsoluto);
-		if (diretorio.isDirectory()) {
-			for (File arquivo : diretorioAbsoluto.listFiles()) {
-				arquivo.delete();
-			}
-			diretorioAbsoluto.delete();
-		}
+		arquivo = new File(diretorio + "/tik.tak");
+		arquivo.delete();
+		diretorio.delete();
+		diretorio = new File("systemProperty");
+		arquivo = new File(diretorio + "/tik.tak");
+		arquivo.delete();
+		arquivo = new File(diretorio + "/tiktak.properties");
+		arquivo.delete();
+		diretorio.delete();
 	}
 
 	@Test
@@ -114,7 +111,7 @@ public class TesteAPI {
 		tiktak.setDir("");
 		assertTrue(!tiktak.getCaminhoDoArquivo().equals(""));
 	}
-	
+
 	@Test
 	public void testeVerificarSetDirv() {
 		tiktak.setDir(diretorio);
@@ -134,7 +131,7 @@ public class TesteAPI {
 		String conteudoArquivo = resultadoDaChamadaDoAPI();
 		assertTrue(conteudoArquivo.contains(this.evento));
 	}
-	
+
 	@Test
 	public void testeVerificarLogTeste() {
 		setUsuario();
@@ -157,64 +154,82 @@ public class TesteAPI {
 		String caminhoDoArquivo = this.tiktak.getCaminhoDoArquivo();
 		assertTrue(caminhoDoArquivo.contains("tik.tak"));
 	}
-	
+
 	@Test
 	public void testaHierarquiaDePropriedadesParaDiretorio() {
+		testPropriedadesProgramaticas();
+		testPropriedadesPontoProperties();
+		testPropriedadesSetProperty();
+		testPropriedadesDefault();
+	}
+
+	@Test
+	public void testPropriedadesProgramaticas() {
+		// Primeira prisetPropertyoridade
 		String diretorioPadrao = System.getProperty("user.dir") + "/";
 		String testDir = diretorioPadrao + "setDir/";
-		String testPropertiesFileDir = diretorioPadrao;// + "propertiesFile/";
-		String testSystemPropertiesDir = diretorioPadrao + "systemProperty/";
-
-		criarArquivoDeProperties(testPropertiesFileDir);
-		System.setProperty("tiktak.dir", testSystemPropertiesDir);
-		
-		// Primeira prisetPropertyoridade: programatico	ok
 		TikTak tiktakLocal = new TikTak();
 		String caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
 		tiktakLocal.setDir(testDir);
 		caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
 		assertTrue(caminhoDoDiretorio.equals(testDir));
-		
-		// Segunda prioridade: tiktak.properties
-		// FIXME dar uma olhada a onde vocë deve colocar um arquivo .properties?
-		tiktakLocal = new TikTak();
-		caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
-		assertTrue(caminhoDoDiretorio.equals(testPropertiesFileDir));
-		excluiArquivoDeProperties(testPropertiesFileDir);
-		
-		// Terceira prioridade: setProperty
-		tiktakLocal = new TikTak();
-		caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
-		assertTrue(caminhoDoDiretorio.equals(testSystemPropertiesDir));
-		System.clearProperty("tiktak.dir");
-		
-		// Quarta prioridade: default
-		tiktakLocal = new TikTak();
-		caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
-		assertTrue(caminhoDoDiretorio.equals(diretorioPadrao));
-	}
-	
-	private void excluiArquivoDeProperties(String dir){
-		File arquivo = new File(dir + "tiktak.properties");
-		if(arquivo.exists())
-			arquivo.delete();
 	}
 
-	private void criarArquivoDeProperties(String testDir) {
+	@Test
+	public void testPropriedadesPontoProperties() {
+		// Segunda prioridade: tiktak.properties
+		String diretorioPadrao = System.getProperty("user.dir") + "/";
+		TikTak tiktakLocal = new TikTak();
+		String caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
+		String testPropertiesFileDir = diretorioPadrao;
+		assertTrue(caminhoDoDiretorio.equals(testPropertiesFileDir));
+		excluiArquivoDeProperties(testPropertiesFileDir);
+	}
+
+	@Test
+	public void testPropriedadesSetProperty() {
+		// Terceira prioridade: setProperty
+		String diretorioPadrao = System.getProperty("user.dir") + "/";
+		String testSystemPropertiesDir = diretorioPadrao + "systemProperty/";
+		criarArquivoDeProperties(testSystemPropertiesDir);
+		System.setProperty("tiktak.dir", testSystemPropertiesDir);
+		TikTak tiktakLocal = new TikTak();
+		String caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
+		assertTrue(caminhoDoDiretorio.equals(testSystemPropertiesDir));
+		System.clearProperty("tiktak.dir");
+	}
+
+	@Test
+	public void testPropriedadesDefault() {
+		// Quarta prioridade: default
+		String diretorioPadrao = System.getProperty("user.dir") + "/";
+		TikTak tiktakLocal = new TikTak();
+		String caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
+		assertTrue(caminhoDoDiretorio.equals(diretorioPadrao));
+	}
+
+	private void excluiArquivoDeProperties(final String dir) {
+		File arquivo = new File(dir + "tiktak.properties");
+		if (arquivo.exists()) {
+			arquivo.delete();
+		}
+	}
+
+	private void criarArquivoDeProperties(final String testDir) {
 		File arquivo = new File(testDir + "tiktak.properties");
 		try {
-			File diretorioFisico = new File(testDir);			
+			File diretorioFisico = new File(testDir);
 			if (!diretorioFisico.exists()) {
 				diretorioFisico.mkdir();
 			}
-			if(!arquivo.exists()){
+			if (!arquivo.exists()) {
 				arquivo.createNewFile();
 				RandomAccessFile raf = new RandomAccessFile(arquivo, "rw");
-				String caminho = "tiktak.dir=" + testDir; 
+				String caminho = "tiktak.dir=" + testDir;
 				raf.write(caminho.getBytes());
 				raf.close();
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
