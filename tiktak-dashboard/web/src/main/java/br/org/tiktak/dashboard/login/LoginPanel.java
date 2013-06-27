@@ -3,7 +3,7 @@ package br.org.tiktak.dashboard.login;
 import org.apache.wicket.Page;
 
 import bancosys.tec.security.SecurityService;
-import br.org.tiktak.dashboard.pages.tabela.Interface;
+import br.org.tiktak.dashboard.pages.grafico.InterfaceSistema;
 
 public class LoginPanel extends jmine.tec.web.wicket.component.panel.LoginPanel {
 
@@ -14,7 +14,7 @@ public class LoginPanel extends jmine.tec.web.wicket.component.panel.LoginPanel 
 	
 	@Override
 	protected Class<? extends Page> getResponsePage() {
-		return Interface.class;
+		return InterfaceSistema.class;
 	}
 
 }
