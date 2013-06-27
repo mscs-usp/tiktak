@@ -11,30 +11,21 @@ import br.org.tiktak.core.GsonFactory;
 public class EscritorArquivo extends Escritor {
 
 	private File arquivo;
-	private String caminhoDoArquivo;
-	private Eventv2 eventov2;
 	
 	@Override
-	public void escreve(final String usuario, final String nomeDoEvento, final String caminhoDeEscrita) throws Exception {
-		// TODO Auto-generated method stub
-		caminhoDoArquivo = caminhoDeEscrita;
-		String json, jsonEventos;
+	public void envia() throws Exception {
 		try {
-		criarArquivoLog();
+			criarArquivoLog();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			eventov2 = Eventv2.getInstance();
-			Event evento = new Event(usuario, nomeDoEvento);
-			eventov2.getEvents().add(evento);
-			json = GsonFactory.getGson().toJson(eventov2) + "\n";
-			jsonEventos = GsonFactory.getGson().toJson(evento);
+
 		}
-		concatenarJson(json, jsonEventos);
+		concatenarJson(json, jsonEventos);		
 	}
 	
-	private File criarArquivoLog() throws IOException {
-		arquivo = new File(this.caminhoDoArquivo);
+	File criarArquivoLog() throws IOException {
+		arquivo = new File(this.caminho);
 		if (!arquivo.exists()) {
 			arquivo.createNewFile();
 			RandomAccessFile writer = new RandomAccessFile(arquivo, "rw");
@@ -45,7 +36,7 @@ public class EscritorArquivo extends Escritor {
 		return arquivo;
 	}
 	
-	private void concatenarJson(final String json, final String jsonEventos) {
+	void concatenarJson(final String json, final String jsonEventos) {
 		try {
 			RandomAccessFile raf = new RandomAccessFile(arquivo, "rw");
 			if (naoContemEventos()) {

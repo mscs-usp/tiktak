@@ -145,7 +145,7 @@ public class TikTak {
 		if(exporter.equals("webservice")){
 			escritor = new EscritorWS();
 			try {
-				escritor.escreve(usuario, nomeDoEvento, wsurl);
+				escritor.log(usuario, nomeDoEvento, wsurl);
 			} catch (Exception e) {
 				
 			}
@@ -153,7 +153,7 @@ public class TikTak {
 		else{
 			escritor = new EscritorArquivo();
 			try {
-				escritor.escreve(usuario, nomeDoEvento, caminhoDoArquivo);
+				escritor.log(usuario, nomeDoEvento, caminhoDoArquivo);
 			} catch (Exception e) {
 				
 			}
