@@ -16,6 +16,7 @@ import jmine.tec.web.wicket.pages.Template;
 
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 
@@ -59,63 +60,46 @@ public class RemocaoSistema extends Template {
 		form.add(listSites); 
 	}
 	
-	public void removeSistema(String sistemaEscolhido){
-		String linha = "";
-		boolean excluiuUltimo = false;
-		try {				
-			FileReader fileReader = new FileReader("dashboard.bd");
-			BufferedReader leitor = new BufferedReader(fileReader);  
-			File arquivoAuxiliar = criaArquivoAuxiliar();
-			FileWriter fw = new FileWriter(arquivoAuxiliar , true );
-			BufferedWriter bw = new BufferedWriter(fw);			
-			while( leitor.ready() ){
-				linha = leitor.readLine();
-				if(linha.contains("sistema")){
-					if (ehSistemaEscolhido(linha, sistemaEscolhido) == true){
-						linha = leitor.readLine();
-						while(leitor.ready() && !linha.contains("sistema")) {
-							linha = leitor.readLine();
-						}
-						if(!leitor.ready())	excluiuUltimo = true;
+	//TODO: Refatorar métodos de manipulação de arquivo!
+	private void removeSistema(String nomeDoSistema) {		
+			FileReader reader;
+			try {
+				reader = new FileReader("dashboard.bd");
+				
+				List<Eventv2> listaDeEventv2 = GsonFactory.getGson().fromJson(reader, new TypeToken<List<Eventv2>>() { }.getType());
+				
+				boolean removeu = false;
+				for (int i = 0; !removeu && i < listaDeEventv2.size(); i++){
+					Eventv2 eventv2 = listaDeEventv2.get(i);
+					boolean ehSistemaParaRemocao = eventv2.getSystem().equals(nomeDoSistema);
+					if(ehSistemaParaRemocao){
+						listaDeEventv2.remove(i);
+						removeu = true;
 					}
 				}
-				bw.write( linha);
-				bw.newLine();					
+				
+				if(removeu){
+					File arquivoAuxiliar = criaArquivoAuxiliar();
+					String json = GsonFactory.getGson().toJson(listaDeEventv2);
+					try{
+						RandomAccessFile raf = new RandomAccessFile(arquivoAuxiliar, "rw");
+						raf.write(json.getBytes());
+						raf.close();
+						
+						File dashboard = new File("dashboard.bd");
+						arquivoAuxiliar.renameTo(dashboard);
+						arquivoAuxiliar.delete();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}			
+					
+				}
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			bw.close();
-			fw.close();
-			if( excluiuUltimo == true) {
-				RandomAccessFile raf = new RandomAccessFile(arquivoAuxiliar, "rw");
-				raf.seek(raf.length() - 3);
-				raf.write("\n]".getBytes());
-			}
-			File dashboard = new File("dashboard.bd");
-			arquivoAuxiliar.renameTo(dashboard);
-			arquivoAuxiliar.delete();
-	        
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 	}
-
-	private Boolean ehSistemaEscolhido(String linha, String sistemaEscolhido ) {
-		String palavra = "";
-		Integer indice = 0;
-		while(linha.charAt(indice) != ':') {
-			indice++;
-		}
-		indice++;
-		while(linha.charAt(indice) != ',') {
-			palavra =  palavra + linha.charAt(indice);
-			indice++;;
-		}
-		return palavra.contains(sistemaEscolhido);
-	}
-
+	
 	private File criaArquivoAuxiliar() {
 		File arquivoAuxiliar = new File("arquivoAuxiliar.bd");
 		try {
@@ -127,6 +111,7 @@ public class RemocaoSistema extends Template {
 		}
 		return arquivoAuxiliar;
 	}
+	
 	
 	@Override
 	protected MessageCreator getHelpTextCreator() {
