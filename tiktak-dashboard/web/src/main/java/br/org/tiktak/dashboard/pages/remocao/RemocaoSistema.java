@@ -26,6 +26,7 @@ import bancosys.tec.exception.MessageCreator;
 import br.org.tiktak.core.Eventv2;
 import br.org.tiktak.core.GsonFactory;
 import br.org.tiktak.dashboard.core.ProcessamentoArquivo;
+import br.org.tiktak.dashboard.pages.tabela.Interface;
 
 public class RemocaoSistema extends Template {
 
@@ -54,6 +55,7 @@ public class RemocaoSistema extends Template {
 			protected void onSubmit() { 
 				removeSistema(sistemaEscolhido);
 				info("O sitema " + sistemaEscolhido + " foi excluido."); 
+				setResponsePage(Interface.class);
 			}
 		}; 
 		add(form);
