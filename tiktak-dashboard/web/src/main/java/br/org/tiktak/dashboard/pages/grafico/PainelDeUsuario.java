@@ -1,4 +1,4 @@
-package br.org.tiktak.dashboard.pages.tabela;
+package br.org.tiktak.dashboard.pages.grafico;
 
 import java.io.File;
 import java.io.FileReader;
@@ -22,9 +22,8 @@ import br.org.tiktak.dashboard.core.BDfuncionalidades;
 
 import com.google.gson.reflect.TypeToken;
 
-public class PainelDeSistema extends Panel {
-
-	private final String sistema;
+public class PainelDeUsuario extends Panel {
+	private final String usuario;
 	private Label label;
 	private Label label2;
 	private Form<Void> form = new Form<Void>("form");
@@ -35,11 +34,11 @@ public class PainelDeSistema extends Panel {
 	private HashMap<String, Integer> mapa = new HashMap<String, Integer>();
 	private List<BDfuncionalidades> listaFuncionalidades = new ArrayList<BDfuncionalidades>();
 
-	public PainelDeSistema(final String id, final String sistema) {
+	public PainelDeUsuario(final String id, final String usuario) {
 		super(id);
-		this.sistema = sistema;
-		this.add(new Label("mensagem", new Model<String>("Conteúdo do " + sistema)));
-		carregaArquivo(sistema);
+		this.usuario = usuario;
+		this.add(new Label("mensagem", new Model<String>("Conteúdo do " + usuario)));
+		carregaArquivo(usuario);
 		this.add(form);
 	}
 
@@ -60,19 +59,16 @@ public class PainelDeSistema extends Panel {
 		}
 	}
 
-	private void processarArquivo(final FileReader reader, String nomeDoSistema) throws IOException {
+	private void processarArquivo(final FileReader reader, String nomeDoUsuario) throws IOException {
 		List<Eventv2> listaDeEventv2 = GsonFactory.getGson().fromJson(reader, new TypeToken<List<Eventv2>>() {}.getType());
 		for (Eventv2 eventov2 : listaDeEventv2) {
-			if (eventov2.getSystem().equals(nomeDoSistema)) {
-				for (Event evento : eventov2.getEvents()) {
-					if (!listaDeIds.contains(evento.getUuid())) {
-						listaDeIds.add(evento.getUuid());
-						totalDeEventos++;
-						String funcionalidade = evento.getFuncionalidade();
-						int count = mapa.containsKey(funcionalidade) ? mapa
-								.get(funcionalidade) : 0;
-						mapa.put(funcionalidade, count + 1);
-					}
+			for (Event evento: eventov2.getEvents()) {
+				if (evento.getUser().equals(nomeDoUsuario) && !listaDeIds.contains(evento.getUuid())) {
+					listaDeIds.add(evento.getUuid());
+					totalDeEventos++;
+					String funcionalidade = evento.getFuncionalidade();
+					int count = mapa.containsKey(funcionalidade) ? mapa.get(funcionalidade) : 0;
+					mapa.put(funcionalidade, count + 1);		
 				}
 			}
 		}
@@ -96,7 +92,6 @@ public class PainelDeSistema extends Panel {
 			this.jsonTabela += "['" + f + "', '" + quantidade + "', '"
 					+ porcentagemFormatada + "%']";
 			naoPrimeiraLinha = true;
-
 		}
 		this.json += "]";
 		this.jsonTabela += "]";

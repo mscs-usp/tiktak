@@ -1,4 +1,4 @@
-package br.org.tiktak.dashboard.pages.tabela;
+package br.org.tiktak.dashboard.pages.grafico;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,7 +25,7 @@ import br.org.tiktak.dashboard.core.ProcessamentoArquivo;
 
 import com.google.gson.reflect.TypeToken;
 
-public class Interface extends Template {
+public class InterfaceSistema extends Template {
 
 	@Override
 	protected MessageCreator getHelpTextCreator() {
@@ -51,12 +51,4 @@ public class Interface extends Template {
 		}
 		add(new TabbedPanel("tabs", tabs));
 	}
-
-	/*@Override
-	public void renderHead(IHeaderResponse arg0) {
-		super.renderHead(arg0);
-
-		arg0.renderCSSReference(new PackageResourceReference(CSS.class,
-				"painel_de_sistema.css"));
-	}*/
 }

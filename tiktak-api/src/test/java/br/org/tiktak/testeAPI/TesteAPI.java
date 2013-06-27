@@ -116,7 +116,8 @@ public class TesteAPI {
 	public void testeVerificarSetDirv() {
 		tiktak.setDir(diretorio);
 		String pathDoArquivo = tiktak.getCaminhoDoArquivo();
-		resultadoDaChamadaDoAPI();
+		for (int i = 0; i < 20; i++)
+			resultadoDaChamadaDoAPI();
 		assertTrue(pathDoArquivo.contains(diretorio));
 	}
 
@@ -207,7 +208,7 @@ public class TesteAPI {
 		String caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
 		assertTrue(caminhoDoDiretorio.equals(diretorioPadrao));
 	}
-
+	
 	private void excluiArquivoDeProperties(final String dir) {
 		File arquivo = new File(dir + "tiktak.properties");
 		if (arquivo.exists()) {
