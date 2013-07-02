@@ -3,8 +3,8 @@ package br.org.tiktak.dashboard.core;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,14 +31,17 @@ public class ProcessamentoArquivo {
 		this.reader = reader;
 	}
 	
-	public Set<String> getNomesSistemas() {
-		Set<String> nomesSistemas = new HashSet<String>();
+	public List<String> getNomesSistemas() {
+		List<String> listaNomesSistemas = new ArrayList<String>();
 		List<Eventv2> listaDeEventv2 = GsonFactory.getGson().fromJson(
 				reader, new TypeToken<List<Eventv2>>() {
 				}.getType());
+		
 		for (Eventv2 eventv2 : listaDeEventv2)
-			nomesSistemas.add(eventv2.getSystem());
-		return nomesSistemas;
+			if (!listaNomesSistemas.contains(eventv2.getSystem()))
+				listaNomesSistemas.add(eventv2.getSystem());
+		
+		return listaNomesSistemas;
 	}
 
 	public Set<String> getNomesUsuarios() {

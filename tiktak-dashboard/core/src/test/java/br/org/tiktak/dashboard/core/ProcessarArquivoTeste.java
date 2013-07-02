@@ -2,7 +2,7 @@ package br.org.tiktak.dashboard.core;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Set;
+import java.util.List;
 
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -14,7 +14,7 @@ public class ProcessarArquivoTeste {
 	public void testGetNomesSistemas(){
 		InputStream reader = this.getClass().getClassLoader().getResourceAsStream("dashboard.bd");
 		ProcessamentoArquivo processador = new ProcessamentoArquivo(new InputStreamReader(reader));
-		Set<String> nomesSistemas = processador.getNomesSistemas();
+		List<String> nomesSistemas = processador.getNomesSistemas();
 		Assert.assertThat(nomesSistemas.size(), Matchers.is(2));
 		Assert.assertThat(nomesSistemas, Matchers.hasItem("Jupiter-Web"));
 		Assert.assertThat(nomesSistemas, Matchers.hasItem("Citati-Prod"));

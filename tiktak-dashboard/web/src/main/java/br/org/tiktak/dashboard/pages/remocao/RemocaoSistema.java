@@ -1,32 +1,27 @@
 package br.org.tiktak.dashboard.pages.remocao;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import jmine.tec.web.wicket.pages.Template;
 
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
-
-import com.google.gson.reflect.TypeToken;
 
 import bancosys.tec.exception.MessageCreator;
 import br.org.tiktak.core.Eventv2;
 import br.org.tiktak.core.GsonFactory;
 import br.org.tiktak.dashboard.core.ProcessamentoArquivo;
 import br.org.tiktak.dashboard.pages.grafico.InterfaceSistema;
+
+import com.google.gson.reflect.TypeToken;
 
 public class RemocaoSistema extends Template {
 
@@ -40,7 +35,7 @@ public class RemocaoSistema extends Template {
 		listaDeSistemas = new ArrayList<String>();
 		try {
 			ProcessamentoArquivo processamentoArquivo = new ProcessamentoArquivo();
-			Set<String> setDeSistemas = processamentoArquivo.getNomesSistemas();
+			List<String> setDeSistemas = processamentoArquivo.getNomesSistemas();
 			for (String nomeDoSistema : setDeSistemas)
 				listaDeSistemas.add(nomeDoSistema);
 			sistemaEscolhido = listaDeSistemas.get(0);
