@@ -1,17 +1,17 @@
-package br.org.tiktak.escritores;
+package br.org.tiktak.writers;
 
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.URLEncoder;
 
-public class EscritorWS extends Escritor{
+public class WriterWS extends Writer{
 
 	@Override
-	public void envia() throws Exception {
+	public void send() throws Exception {
 	    String data = URLEncoder.encode("json", "UTF-8");// + "=" + URLEncoder.encode(json, "UTF-8");
 		
-	    Socket socket = new Socket(caminho, 8080);
+	    Socket socket = new Socket(path, 8080);
 
 	    String path = "/servlet";
 	    BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));

@@ -67,7 +67,7 @@ public class TesteAPI {
 	private String carregarConteudoArquivo() {
 		BufferedReader reader;
 		try {
-			reader = new BufferedReader(new FileReader(tiktak.getCaminhoDoArquivo()));
+			reader = new BufferedReader(new FileReader(tiktak.getFilePath()));
 			String line = null;
 			StringBuilder stringBuilder = new StringBuilder();
 			String ls = System.getProperty("line.separator");
@@ -75,6 +75,7 @@ public class TesteAPI {
 				stringBuilder.append(line);
 				stringBuilder.append(ls);
 			}
+			reader.close();
 			return stringBuilder.toString();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -109,13 +110,13 @@ public class TesteAPI {
 	@Test
 	public void testeSetDirVazio() {
 		tiktak.setDir("");
-		assertTrue(!tiktak.getCaminhoDoArquivo().equals(""));
+		assertTrue(!tiktak.getFilePath().equals(""));
 	}
 
 	@Test
 	public void testeVerificarSetDirv() {
 		tiktak.setDir(diretorio);
-		String pathDoArquivo = tiktak.getCaminhoDoArquivo();
+		String pathDoArquivo = tiktak.getFilePath();
 		for (int i = 0; i < 20; i++)
 			resultadoDaChamadaDoAPI();
 		assertTrue(pathDoArquivo.contains(diretorio));
@@ -137,7 +138,7 @@ public class TesteAPI {
 	public void testeVerificarLogTeste() {
 		setUsuario();
 		setEvento();
-		tiktak.logTeste(this.usuario, this.evento);
+		tiktak.logTest(this.usuario, this.evento);
 		String conteudoArquivo = carregarConteudoArquivo();
 		assertTrue(conteudoArquivo.contains(this.evento));
 	}
@@ -152,7 +153,7 @@ public class TesteAPI {
 
 	@Test
 	public void testaSePathDoArquivoEhTikPontoTak() {
-		String caminhoDoArquivo = this.tiktak.getCaminhoDoArquivo();
+		String caminhoDoArquivo = this.tiktak.getFilePath();
 		assertTrue(caminhoDoArquivo.contains("tik.tak"));
 	}
 
@@ -170,9 +171,9 @@ public class TesteAPI {
 		String diretorioPadrao = System.getProperty("user.dir") + "/";
 		String testDir = diretorioPadrao + "setDir/";
 		TikTak tiktakLocal = new TikTak();
-		String caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
+		String caminhoDoDiretorio = tiktakLocal.getDirectoryPath();
 		tiktakLocal.setDir(testDir);
-		caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
+		caminhoDoDiretorio = tiktakLocal.getDirectoryPath();
 		assertTrue(caminhoDoDiretorio.equals(testDir));
 	}
 
@@ -181,7 +182,7 @@ public class TesteAPI {
 		// Segunda prioridade: tiktak.properties
 		String diretorioPadrao = System.getProperty("user.dir") + "/";
 		TikTak tiktakLocal = new TikTak();
-		String caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
+		String caminhoDoDiretorio = tiktakLocal.getDirectoryPath();
 		String testPropertiesFileDir = diretorioPadrao;
 		assertTrue(caminhoDoDiretorio.equals(testPropertiesFileDir));
 		excluiArquivoDeProperties(testPropertiesFileDir);
@@ -195,7 +196,7 @@ public class TesteAPI {
 		criarArquivoDeProperties(testSystemPropertiesDir);
 		System.setProperty("tiktak.dir", testSystemPropertiesDir);
 		TikTak tiktakLocal = new TikTak();
-		String caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
+		String caminhoDoDiretorio = tiktakLocal.getDirectoryPath();
 		assertTrue(caminhoDoDiretorio.equals(testSystemPropertiesDir));
 		System.clearProperty("tiktak.dir");
 	}
@@ -205,7 +206,7 @@ public class TesteAPI {
 		// Quarta prioridade: default
 		String diretorioPadrao = System.getProperty("user.dir") + "/";
 		TikTak tiktakLocal = new TikTak();
-		String caminhoDoDiretorio = tiktakLocal.getCaminhoDoDiretorio();
+		String caminhoDoDiretorio = tiktakLocal.getDirectoryPath();
 		assertTrue(caminhoDoDiretorio.equals(diretorioPadrao));
 	}
 	
