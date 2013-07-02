@@ -42,11 +42,11 @@ public class PainelDeUsuario extends Panel {
 		this.add(form);
 	}
 
-	private void carregaArquivo(String nomeDoSistema) {
+	private void carregaArquivo(String nomeDoUsuario) {
 		File file = new File("dashboard.bd");
 		if (file.exists()) {
 			try {
-				processarArquivo(new FileReader(file), nomeDoSistema);
+				processarArquivo(new FileReader(file), nomeDoUsuario);
 				label = new Label("dados", json);
 				label.setEscapeModelStrings(false);
 				form.add(label);

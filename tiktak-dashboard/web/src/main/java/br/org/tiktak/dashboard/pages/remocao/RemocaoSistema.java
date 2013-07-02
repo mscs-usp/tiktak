@@ -43,7 +43,7 @@ public class RemocaoSistema extends Template {
 			e.printStackTrace();
 		}
 		add(new FeedbackPanel("feedback")); 
-		DropDownChoice<String> listSites = new DropDownChoice<String>(
+		DropDownChoice<String> dropDown = new DropDownChoice<String>(
 			"sistemas", new PropertyModel<String>(this, "sistemaEscolhido"), listaDeSistemas); 
 		Form<Void> form = new Form<Void>("form") {
 			@Override
@@ -54,7 +54,7 @@ public class RemocaoSistema extends Template {
 			}
 		}; 
 		add(form);
-		form.add(listSites); 
+		form.add(dropDown); 
 	}
 	
 	//TODO: Refatorar métodos de manipulação de arquivo!

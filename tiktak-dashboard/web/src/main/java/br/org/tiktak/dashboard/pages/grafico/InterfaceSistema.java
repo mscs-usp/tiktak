@@ -30,10 +30,8 @@ public class InterfaceSistema extends Template {
 
 			for (String nomeDoSistema : nomesSistemas)
 				tabs.add(new TabDeSistema(nomeDoSistema));
-
-			
 		} catch (FileNotFoundException e) {
-
+			error(e);
 		}
 		add(new TabbedPanel("tabs", tabs));
 	}
