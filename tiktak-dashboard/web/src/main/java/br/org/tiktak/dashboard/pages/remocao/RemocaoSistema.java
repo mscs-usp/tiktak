@@ -62,39 +62,39 @@ public class RemocaoSistema extends Template {
 			FileReader reader;
 			try {
 				reader = new FileReader("dashboard.bd");
-				
 				List<Eventv2> listaDeEventv2 = GsonFactory.getGson().fromJson(reader, new TypeToken<List<Eventv2>>() { }.getType());
 				
-				boolean removeu = false;
-				for (int i = 0; !removeu && i < listaDeEventv2.size(); i++){
-					Eventv2 eventv2 = listaDeEventv2.get(i);
-					boolean ehSistemaParaRemocao = eventv2.getSystem().equals(nomeDoSistema);
-					if(ehSistemaParaRemocao){
-						listaDeEventv2.remove(i);
-						removeu = true;
-					}
-				}
-				
-				if(removeu){
-					File arquivoAuxiliar = criaArquivoAuxiliar();
-					String json = GsonFactory.getGson().toJson(listaDeEventv2);
-					try{
-						RandomAccessFile raf = new RandomAccessFile(arquivoAuxiliar, "rw");
-						raf.write(json.getBytes());
-						raf.close();
-						
-						File dashboard = new File("dashboard.bd");
-						arquivoAuxiliar.renameTo(dashboard);
-						arquivoAuxiliar.delete();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}			
-					
-				}
+				removeSistemaDaLista(nomeDoSistema, listaDeEventv2);
+				escreveArquivo(listaDeEventv2);
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+	}
+
+	private void removeSistemaDaLista(String nomeDoSistema, List<Eventv2> listaDeEventv2) {
+		for (int i = 0; i < listaDeEventv2.size(); i++) {
+			Eventv2 eventv2 = listaDeEventv2.get(i);
+			if (nomeDoSistema.equals(eventv2.getSystem())) {
+				listaDeEventv2.remove(eventv2);
+				i--;
+			}
+		}
+	}
+
+	private void escreveArquivo(List<Eventv2> listaDeEventv2) {
+		File arquivoAuxiliar = criaArquivoAuxiliar();
+		String json = GsonFactory.getGson().toJson(listaDeEventv2);
+		try{
+			RandomAccessFile raf = new RandomAccessFile(arquivoAuxiliar, "rw");
+			raf.write(json.getBytes());
+			raf.close();
+			
+			File dashboard = new File("dashboard.bd");
+			arquivoAuxiliar.renameTo(dashboard);
+			arquivoAuxiliar.delete();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private File criaArquivoAuxiliar() {
