@@ -1,4 +1,4 @@
-package br.org.tiktak.core;
+package br.org.tiktak.api;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Properties;
 
+import br.org.tiktak.core.Event;
+import br.org.tiktak.core.EventSystem;
+import br.org.tiktak.core.GsonFactory;
 import br.org.tiktak.writers.Writer;
 import br.org.tiktak.writers.WriterFile;
 import br.org.tiktak.writers.WriterWS;
@@ -28,7 +31,7 @@ public class TikTak {
 	private String filePath;
 	private final String systemAPI;
 	private File file;
-	private final EventSystem eventSystem;
+	private EventSystem eventSystem;
 
 	private Writer escritor;
 	private String exporter;
@@ -133,7 +136,7 @@ public class TikTak {
 			}
 		}
 	}
-	
+
 	private void setDirectoryPath() throws IOException {
 		String parametroSetDir, parametroGetProperty, parametroFileProperties;
 

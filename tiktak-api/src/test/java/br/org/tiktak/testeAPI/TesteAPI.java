@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import br.org.tiktak.core.TikTak;
+import br.org.tiktak.api.TikTak;
 
 public class TesteAPI {
 	private TikTak tiktak;
@@ -117,8 +117,9 @@ public class TesteAPI {
 	public void testeVerificarSetDirv() {
 		tiktak.setDir(diretorio);
 		String pathDoArquivo = tiktak.getFilePath();
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 20; i++) {
 			resultadoDaChamadaDoAPI();
+		}
 		assertTrue(pathDoArquivo.contains(diretorio));
 	}
 
@@ -209,7 +210,7 @@ public class TesteAPI {
 		String caminhoDoDiretorio = tiktakLocal.getDirectoryPath();
 		assertTrue(caminhoDoDiretorio.equals(diretorioPadrao));
 	}
-	
+
 	private void excluiArquivoDeProperties(final String dir) {
 		File arquivo = new File(dir + "tiktak.properties");
 		if (arquivo.exists()) {

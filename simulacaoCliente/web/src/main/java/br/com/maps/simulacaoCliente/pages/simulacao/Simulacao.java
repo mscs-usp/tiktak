@@ -8,7 +8,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 
 import bancosys.tec.exception.MessageCreator;
-import br.org.tiktak.core.TikTak;
+import br.org.tiktak.api.TikTak;
 
 public class Simulacao extends Template {
 
