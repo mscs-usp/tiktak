@@ -60,7 +60,7 @@ public class TikTak {
 		this("System");
 	}
 
-	public void getAndCreateInFileSystem() {
+	private void getAndCreateInFileSystem() {
 		try {
 			setDirectoryPath();
 			createDirectoryLog();
