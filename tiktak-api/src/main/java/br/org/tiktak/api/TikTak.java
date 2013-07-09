@@ -193,33 +193,4 @@ public class TikTak {
 		return file;
 	}
 
-	private void concatenateJson(final String json, final String jsonEvents) {
-		try {
-			RandomAccessFile raf = new RandomAccessFile(file, "rw");
-			if (doesntContainEvents()) {
-				raf.write(json.getBytes());
-			} else {
-				raf.seek(raf.length() - 3);
-				raf.write((",\n" + jsonEvents).getBytes());
-				raf.write("]}\n".getBytes());
-			}
-			raf.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private Boolean doesntContainEvents() {
-		boolean isEmpty = false;
-		int count = 0;
-		try {
-			RandomAccessFile raf = new RandomAccessFile(file, "rw");
-			String linha = raf.readLine();
-			count = linha.split("\\{", -1).length - 1;
-			raf.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return ((!isEmpty) && (count == 1));
-	}
 }
