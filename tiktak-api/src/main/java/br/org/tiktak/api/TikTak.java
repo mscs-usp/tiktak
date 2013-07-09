@@ -32,7 +32,6 @@ public class TikTak {
 	private File file;
 	private EventSystem eventSystem;
 
-	private Writer escritor;
 	private String exporter;
 	private String wsurl;
 
@@ -94,6 +93,15 @@ public class TikTak {
 		getAndCreateInFileSystem();
 	}
 
+	private Writer writer() {
+		if (exporter.equals("webservice")) {
+			return new WriterWS();
+
+		} else {
+			return new WriterFile();
+		}
+	}
+
 	/**
 	 * Log the event and the user
 	 * 
@@ -106,16 +114,14 @@ public class TikTak {
 	public void log(final String user, final String eventName) {
 
 		if (exporter.equals("webservice")) {
-			escritor = new WriterWS();
 			try {
-				escritor.log(user, eventName, wsurl);
+				writer().log(user, eventName, wsurl);
 			} catch (Exception e) {
 
 			}
 		} else {
-			escritor = new WriterFile();
 			try {
-				escritor.log(user, eventName, filePath);
+				writer().log(user, eventName, filePath);
 			} catch (Exception e) {
 
 			}
