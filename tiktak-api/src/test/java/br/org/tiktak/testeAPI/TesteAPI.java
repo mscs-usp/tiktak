@@ -139,7 +139,7 @@ public class TesteAPI {
 	public void testeVerificarLogTeste() {
 		setUsuario();
 		setEvento();
-		tiktak.logTest(this.usuario, this.evento);
+		tiktak.log(this.usuario, this.evento);
 		String conteudoArquivo = carregarConteudoArquivo();
 		assertTrue(conteudoArquivo.contains(this.evento));
 	}

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Properties;
 
-import br.org.tiktak.core.Event;
 import br.org.tiktak.core.EventSystem;
 import br.org.tiktak.core.GsonFactory;
 import br.org.tiktak.writers.Writer;
@@ -103,22 +102,8 @@ public class TikTak {
 	 * @param eventName
 	 *            String with name of the event
 	 * */
-	public void log(final String user, final String eventName) {
-		String json, jsonEventos;
-		try {
-			createLogFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			Event evento = new Event(user, eventName);
-			eventSystem.getEvents().add(evento);
-			json = GsonFactory.getGson().toJson(eventSystem) + "\n";
-			jsonEventos = GsonFactory.getGson().toJson(evento);
-		}
-		concatenateJson(json, jsonEventos);
-	}
 
-	public void logTest(final String user, final String eventName) {
+	public void log(final String user, final String eventName) {
 
 		if (exporter.equals("webservice")) {
 			escritor = new WriterWS();
