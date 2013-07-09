@@ -25,8 +25,7 @@ import br.org.tiktak.writers.WriterWS;
  *          >http://www.gnu.org/copyleft/lesser.html</a>
  * */
 public class TikTak {
-	private final String defaultDirectoryPath;
-	private String directoryPath;
+	private String path;
 	private String filePath;
 	private final String systemAPI;
 	private File file;
@@ -34,6 +33,7 @@ public class TikTak {
 
 	private String exporter;
 	private String wsurl;
+	private boolean trueSetDir = false;
 
 	/**
 	 * Constructor with parameter
@@ -42,8 +42,7 @@ public class TikTak {
 	 *            String with name of the system in use
 	 * */
 	public TikTak(final String system) {
-		defaultDirectoryPath = System.getProperty("user.dir") + "/";
-		directoryPath = "";
+		path = System.getProperty("user.dir") + "/";
 		filePath = "";
 		systemAPI = system;
 		this.eventSystem = EventSystem.getInstance();
@@ -74,7 +73,7 @@ public class TikTak {
 	}
 
 	public String getDirectoryPath() {
-		return directoryPath;
+		return path;
 	}
 
 	/**
@@ -84,12 +83,13 @@ public class TikTak {
 	 *            String with directory name
 	 * */
 	public void setDir(String nameOfDirectory) {
+		trueSetDir = true;
 		if (nameOfDirectory.equals("")) {
-			nameOfDirectory = defaultDirectoryPath;
+			nameOfDirectory = path;
 		} else if (!nameOfDirectory.endsWith("/")) {
 			nameOfDirectory += "/";
 		}
-		this.directoryPath = nameOfDirectory;
+		this.path = nameOfDirectory;
 		getAndCreateInFileSystem();
 	}
 
@@ -129,23 +129,16 @@ public class TikTak {
 	}
 
 	private void setDirectoryPath() throws IOException {
-		String parametroSetDir, parametroGetProperty, parametroFileProperties;
+		String parametroGetProperty, parametroFileProperties;
 
 		parametroFileProperties = getPropriertiesOfPropertiesFile("tiktak.dir");
-		parametroSetDir = this.directoryPath;
 		parametroGetProperty = System.getProperty("tiktak.dir");
 
-		if (parametroSetDir != null && !parametroSetDir.equals("")) {
-			directoryPath = parametroSetDir;
+		if (trueSetDir) {
 		} else if (parametroFileProperties != null && !parametroFileProperties.equals("")) {
-			directoryPath = parametroFileProperties;
+			path = parametroFileProperties;
 		} else if (parametroGetProperty != null) {
-			directoryPath = parametroGetProperty;
-		} else {
-			directoryPath = defaultDirectoryPath;
-		}
-		if (!directoryPath.endsWith("/")) {
-			directoryPath += "/";
+			path = parametroGetProperty;
 		}
 	}
 
@@ -166,7 +159,7 @@ public class TikTak {
 	}
 
 	private String createDirectoryLog() throws IOException {
-		String directory = directoryPath;
+		String directory = path;
 		if (directory != "") {
 			File physicalDirectory = new File(directory);
 			if (!physicalDirectory.exists()) {
@@ -178,7 +171,7 @@ public class TikTak {
 
 	private void setPathOfFile() throws IOException {
 		String parameterSetFile = "tik.tak";
-		filePath = this.directoryPath + parameterSetFile;
+		filePath = this.path + parameterSetFile;
 		exporter = getPropriertiesOfPropertiesFile("tiktak.exporter");
 		if (exporter != null && exporter.equals("webservice")) {
 			wsurl = getPropriertiesOfPropertiesFile("tiktak.ws-url");
