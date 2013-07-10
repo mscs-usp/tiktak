@@ -26,7 +26,6 @@ import br.org.tiktak.writers.WriterWS;
  * */
 public class TikTak {
 	private String path;
-	private String filePath;
 	private final String systemAPI;
 	private File file;
 	private EventSystem eventSystem;
@@ -43,7 +42,6 @@ public class TikTak {
 	 * */
 	public TikTak(final String system) {
 		path = System.getProperty("user.dir") + "/";
-		filePath = "";
 		systemAPI = system;
 		this.eventSystem = EventSystem.getInstance();
 		this.eventSystem.init(systemAPI);
@@ -68,12 +66,8 @@ public class TikTak {
 		}
 	}
 
-	public String getFilePath() {
-		return filePath;
-	}
-
 	public String getDirectoryPath() {
-		return path;
+		return file.getParent() + "/";
 	}
 
 	/**
@@ -121,7 +115,7 @@ public class TikTak {
 			}
 		} else {
 			try {
-				writer().log(user, eventName, filePath);
+				writer().log(user, eventName, path + "tik.tak");
 			} catch (Exception e) {
 
 			}
@@ -170,8 +164,6 @@ public class TikTak {
 	}
 
 	private void setPathOfFile() throws IOException {
-		String parameterSetFile = "tik.tak";
-		filePath = this.path + parameterSetFile;
 		exporter = getPropriertiesOfPropertiesFile("tiktak.exporter");
 		if (exporter != null && exporter.equals("webservice")) {
 			wsurl = getPropriertiesOfPropertiesFile("tiktak.ws-url");
@@ -181,7 +173,7 @@ public class TikTak {
 	}
 
 	private File createLogFile() throws IOException {
-		file = new File(this.filePath);
+		file = new File(path + "tik.tak");
 		if (!file.exists()) {
 			file.createNewFile();
 			RandomAccessFile writer = new RandomAccessFile(file, "rw");
